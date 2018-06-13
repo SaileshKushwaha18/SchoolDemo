@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Sailesh
@@ -104,6 +107,9 @@ public class Student implements Serializable{
 	private String emailaddress;
 
     @OneToOne(cascade=CascadeType.ALL)
+    @JoinTable(name="STUDENT_STUDENTCLASS",
+    joinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")},
+    inverseJoinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")})
 	private StudentClass studentClass;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL,CascadeType.PERSIST,CascadeType.MERGE }, mappedBy = "student")
