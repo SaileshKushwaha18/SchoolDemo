@@ -25,7 +25,7 @@ public class ClassFeeParams {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="CLASS_FEE_PARAMS_ID")
-	private Integer id;
+	private Long id;
 	
 	@Column(name="PARAMS_NAME_TXT")
 	private String name;
@@ -38,11 +38,11 @@ public class ClassFeeParams {
 	@JoinColumn(name = "FEE_ID", nullable = false )
 	private ClassFee classFee;
     
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,7 +62,7 @@ public class ClassFeeParams {
 		this.value = value;
 	}
 
-	public ClassFeeParams(Integer id, String name, String value) {
+	public ClassFeeParams(Long id, String name, String value) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -83,7 +83,7 @@ public class ClassFeeParams {
 		this.classFee = classFee;
 	}
 
-	public ClassFeeParams(Integer id, String name, String value, ClassFee classFee) {
+	public ClassFeeParams(Long id, String name, String value, ClassFee classFee) {
 		super();
 		this.id = id;
 		this.name = name;

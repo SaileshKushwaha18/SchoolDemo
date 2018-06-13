@@ -3,11 +3,14 @@ package com.example.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -18,7 +21,7 @@ public class StudentClass {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_CLASS_ID")
-	private Long StudentClassId;
+	private Long studentClassId;
 	
 	@Column(name="STUDENT_CLASS_NAME_TXT")
 	private String name;
@@ -29,16 +32,18 @@ public class StudentClass {
 	@Column(name="ACTIVE_FLG")
 	private boolean isActive;
 
-	@OneToMany(mappedBy = "studentClass")
-	//@JoinTable(name = "STUDENT_STUDENTCLASS", joinColumns = { @JoinColumn(name = "STUDENT_CLASS_ID") }, inverseJoinColumns = { @JoinColumn(name = "STUDENT_ID") })
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="STUDENT_STUDENTCLASS",
+    joinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")},
+    inverseJoinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")})
 	private List<Student> students  = new ArrayList<Student>();
 	
 	public Long getStudentClassId() {
-		return StudentClassId;
+		return studentClassId;
 	}
 
 	public void setStudentClassId(Long studentClassId) {
-		StudentClassId = studentClassId;
+		this.studentClassId = studentClassId;
 	}
 
 	public String getName() {

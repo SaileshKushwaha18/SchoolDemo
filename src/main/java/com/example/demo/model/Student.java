@@ -15,14 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /**
  * @author Sailesh
@@ -107,9 +103,7 @@ public class Student implements Serializable{
 	@Column(name="EMAIL_ADDRESS_TXT")
 	private String emailaddress;
 
-	@JsonProperty(access = Access.WRITE_ONLY)
-    @ManyToOne
-    @JoinColumn(name = "STUDENT_CLASS_ID")
+    @OneToOne(cascade=CascadeType.ALL)
 	private StudentClass studentClass;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL,CascadeType.PERSIST,CascadeType.MERGE }, mappedBy = "student")
@@ -314,6 +308,7 @@ public class Student implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 
 	public StudentClass getStudentClass() {
 		return studentClass;

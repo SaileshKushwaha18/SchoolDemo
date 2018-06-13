@@ -15,7 +15,7 @@ public class StudentFee {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_FEE_ID")
-	private Long studentFeeId;
+	private Long studentFeeParamsId;
 	
 	@OneToOne
 	@JoinColumn(name="FEE_ID")
@@ -28,12 +28,12 @@ public class StudentFee {
 	@Column(name="ACTIVE_FLG")
 	private boolean isActive;
 	
-	public Long getStudentFeeId() {
-		return studentFeeId;
+	public Long getStudentFeeParamsId() {
+		return studentFeeParamsId;
 	}
 
-	public void setStudentFeeId(Long studentFeeId) {
-		this.studentFeeId = studentFeeId;
+	public void setStudentFeeParamsId(Long studentFeeParamsId) {
+		this.studentFeeParamsId = studentFeeParamsId;
 	}
 
 	public Student getStudent() {
@@ -66,9 +66,9 @@ public class StudentFee {
 		this.isActive = isActive;
 	}
 
-	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, boolean isActive) {
+	public StudentFee(Long studentFeeParamsId, ClassFee classFee, Student student, boolean isActive) {
 		super();
-		this.studentFeeId = studentFeeId;
+		this.studentFeeParamsId = studentFeeParamsId;
 		this.classFee = classFee;
 		this.student = student;
 		this.isActive = isActive;
