@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,8 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author Sailesh
  *
@@ -30,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="STUDENT")
-//@JsonIgnoreProperties({"studentClass"})
 public class Student implements Serializable{
 
 	private static final long serialVersionUID = -1056099330980863129L;
@@ -106,7 +102,7 @@ public class Student implements Serializable{
 	@Column(name="EMAIL_ADDRESS_TXT")
 	private String emailaddress;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne
     @JoinTable(name="STUDENT_STUDENTCLASS",
     joinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")},
     inverseJoinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")})
@@ -319,7 +315,7 @@ public class Student implements Serializable{
 	public StudentClass getStudentClass() {
 		return studentClass;
 	}
-
+	
 	public void setStudentClass(StudentClass studentClass) {
 		this.studentClass = studentClass;
 	}
@@ -370,6 +366,19 @@ public class Student implements Serializable{
 		this.studentClass = studentClass;
 		this.studenFeeWaivers = studenFeeWaivers;
 		this.studentFee = studentFee;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [studentId=" + studentId + ", admissionno=" + admissionno + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", studentAdharId=" + studentAdharId + ", studentdob=" + studentdob
+				+ ", gender=" + gender + ", startDate=" + startDate + ", endDate=" + endDate + ", fathername="
+				+ fathername + ", fatherage=" + fatherage + ", fatherqualification=" + fatherqualification
+				+ ", fatherdob=" + fatherdob + ", fatherprofession=" + fatherprofession + ", mothername=" + mothername
+				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
+				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno
+				+ ", cellno=" + cellno + ", emailaddress=" + emailaddress + ", studentClass=" + studentClass
+				+ ", studenFeeWaivers=" + studenFeeWaivers + ", studentFee=" + studentFee + "]";
 	}
 		
 }

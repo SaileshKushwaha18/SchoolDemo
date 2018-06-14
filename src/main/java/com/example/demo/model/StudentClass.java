@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -15,7 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="STUDENT_CLASS")
-public class StudentClass {
+public class StudentClass implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,12 +40,12 @@ public class StudentClass {
 	@Column(name="ACTIVE_FLG")
 	private boolean isActive;
 
-    @OneToMany(cascade=CascadeType.ALL,mappedBy="studentClass")
+    @OneToMany
     @JsonIgnoreProperties("studentClass")
-//    @JoinTable(name="STUDENT_STUDENTCLASS",
-//    joinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")},
-//    inverseJoinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")})
-	private List<Student> students;
+    @JoinTable(name="STUDENT_STUDENTCLASS",
+    joinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")},
+    inverseJoinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")})
+	private List<Student> students = new ArrayList<>();
 	
 	public Long getStudentClassId() {
 		return studentClassId;
@@ -80,6 +89,7 @@ public class StudentClass {
 		return students;
 	}
 
+	
 	public void setStudents(List<Student> students) {
 		this.students = students;
 	}
@@ -90,6 +100,12 @@ public class StudentClass {
 		this.description = description;
 		this.isActive = isActive;
 		this.students = students;
+	}
+
+	@Override
+	public String toString() {
+		return "StudentClass [studentClassId=" + studentClassId + ", name=" + name + ", description=" + description
+				+ ", isActive=" + isActive + ", students=" + students + "]";
 	}
 
 
