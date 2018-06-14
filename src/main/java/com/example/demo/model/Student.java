@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author Sailesh
  *
@@ -103,6 +105,7 @@ public class Student implements Serializable{
 	private String emailaddress;
 
     @OneToOne
+    @JsonIgnoreProperties("students")
     @JoinTable(name="STUDENT_STUDENTCLASS",
     joinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")},
     inverseJoinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")})
