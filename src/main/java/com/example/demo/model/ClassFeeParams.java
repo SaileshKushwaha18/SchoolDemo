@@ -2,17 +2,10 @@ package com.example.demo.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /**
  * @author Sailesh
@@ -25,25 +18,21 @@ public class ClassFeeParams {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="CLASS_FEE_PARAMS_ID")
-	private Long id;
+	private Long classFeeParamsId;
 	
 	@Column(name="PARAMS_NAME_TXT")
 	private String name;
 	
 	@Column(name="PARAMS_VALUE_TXT")
 	private String value;
-
-	@JsonProperty(access = Access.WRITE_ONLY)
-	@ManyToOne( fetch = FetchType.EAGER )
-	@JoinColumn(name = "FEE_ID", nullable = false )
-	private ClassFee classFee;
     
-	public Long getId() {
-		return id;
+
+	public Long getClassFeeParamsId() {
+		return classFeeParamsId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setClassFeeParamsId(Long classFeeParamsId) {
+		this.classFeeParamsId = classFeeParamsId;
 	}
 
 	public String getName() {
@@ -62,9 +51,9 @@ public class ClassFeeParams {
 		this.value = value;
 	}
 
-	public ClassFeeParams(Long id, String name, String value) {
+	public ClassFeeParams(Long classFeeParamsId, String name, String value) {
 		super();
-		this.id = id;
+		this.classFeeParamsId = classFeeParamsId;
 		this.name = name;
 		this.value = value;
 	}
@@ -73,23 +62,5 @@ public class ClassFeeParams {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-
-	public ClassFee getClassFee() {
-		return classFee;
-	}
-
-	public void setClassFee(ClassFee classFee) {
-		this.classFee = classFee;
-	}
-
-	public ClassFeeParams(Long id, String name, String value, ClassFee classFee) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.value = value;
-		this.classFee = classFee;
-	}
-
 
 }

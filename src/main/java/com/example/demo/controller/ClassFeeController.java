@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.ClassFee;
-import com.example.demo.model.ClassFeeParams;
-import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
 
 @RestController
@@ -22,9 +20,6 @@ import com.example.demo.repository.ClassFeeRepository;
 public class ClassFeeController {
 	@Autowired
 	private ClassFeeRepository classFeeRepository;
-	
-	@Autowired
-	private ClassFeeParamsRepository classFeeParamsRepository;
 	
 	@RequestMapping(value="/classfee", method=RequestMethod.GET)
 	public List<ClassFee> getClassFees(){

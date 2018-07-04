@@ -11,4 +11,6 @@ import com.example.demo.model.Student;
 public interface StudentRepository extends CrudRepository<Student, Long> {
 
 	Student findByAdmissionno(String admissionno);
+	
+	//Student newStudentId();
 }

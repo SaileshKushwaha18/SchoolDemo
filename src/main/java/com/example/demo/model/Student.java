@@ -114,10 +114,6 @@ public class Student implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL,CascadeType.PERSIST,CascadeType.MERGE }, mappedBy = "student")
 	private List<StudentFeeWaiver> studenFeeWaivers;
 	
-	@OneToOne
-	@JoinColumn(name="STUDENT_FEE_ID")
-	private StudentFee studentFee;
-	
 	public Long getStudentId() {
 		return studentId;
 	}
@@ -323,13 +319,6 @@ public class Student implements Serializable{
 		this.studentClass = studentClass;
 	}
 
-	public StudentFee getStudentFee() {
-		return studentFee;
-	}
-
-	public void setStudentFee(StudentFee studentFee) {
-		this.studentFee = studentFee;
-	}
 
 	public Student() {
 		super();
@@ -340,8 +329,7 @@ public class Student implements Serializable{
 			Date studentdob, String gender, Date startDate, Date endDate, String fathername, Integer fatherage,
 			String fatherqualification, Date fatherdob, String fatherprofession, String mothername, Integer motherage,
 			String motherqualification, Date motherdob, String motherprofession, String address, String phoneno,
-			String cellno, String emailaddress, StudentClass studentClass, List<StudentFeeWaiver> studenFeeWaivers,
-			StudentFee studentFee) {
+			String cellno, String emailaddress, StudentClass studentClass, List<StudentFeeWaiver> studenFeeWaivers) {
 		super();
 		this.studentId = studentId;
 		this.admissionno = admissionno;
@@ -368,7 +356,6 @@ public class Student implements Serializable{
 		this.emailaddress = emailaddress;
 		this.studentClass = studentClass;
 		this.studenFeeWaivers = studenFeeWaivers;
-		this.studentFee = studentFee;
 	}
 
 	@Override
@@ -381,7 +368,7 @@ public class Student implements Serializable{
 				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
 				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno
 				+ ", cellno=" + cellno + ", emailaddress=" + emailaddress + ", studentClass=" + studentClass
-				+ ", studenFeeWaivers=" + studenFeeWaivers + ", studentFee=" + studentFee + "]";
+				+ ", studenFeeWaivers=" + studenFeeWaivers + "]";
 	}
 		
 }

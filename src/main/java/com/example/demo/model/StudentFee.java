@@ -1,13 +1,20 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name="STUDENT_FEE")
@@ -15,10 +22,10 @@ public class StudentFee {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_FEE_ID")
-	private Long studentFeeParamsId;
+	private Long studentFeeId;
 	
 	@OneToOne
-	@JoinColumn(name="FEE_ID")
+	@JoinColumn(name="CLASS_FEE_ID")
 	private ClassFee classFee;
 	
 	@OneToOne
@@ -28,12 +35,22 @@ public class StudentFee {
 	@Column(name="ACTIVE_FLG")
 	private boolean isActive;
 	
-	public Long getStudentFeeParamsId() {
-		return studentFeeParamsId;
+	@Column(name="STUDENT_FEE_AMT")
+	private String studentFeeAmt;
+	
+	@JsonProperty(access = Access.READ_ONLY)
+	@OneToMany
+    @JoinTable(name="STUDENTFEE_STUDENTFEEPARAMS",
+    joinColumns={@JoinColumn(name="STUDENT_FEE_ID", referencedColumnName="STUDENT_FEE_ID")},
+    inverseJoinColumns={@JoinColumn(name="STUDENT_FEE_PARAMS_ID", referencedColumnName="STUDENT_FEE_PARAMS_ID")})
+	private List<StudentFeeParams> studentFeeParams;
+	
+	public Long getStudentFeeId() {
+		return studentFeeId;
 	}
 
-	public void setStudentFeeParamsId(Long studentFeeParamsId) {
-		this.studentFeeParamsId = studentFeeParamsId;
+	public void setStudentFeeId(Long studentFeeId) {
+		this.studentFeeId = studentFeeId;
 	}
 
 	public Student getStudent() {
@@ -42,6 +59,14 @@ public class StudentFee {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public String getStudentFeeAmt() {
+		return studentFeeAmt;
+	}
+
+	public void setStudentFeeAmt(String studentFeeAmt) {
+		this.studentFeeAmt = studentFeeAmt;
 	}
 
 	public StudentFee() {
@@ -66,15 +91,29 @@ public class StudentFee {
 		this.isActive = isActive;
 	}
 
-	public StudentFee(Long studentFeeParamsId, ClassFee classFee, Student student, boolean isActive) {
+	public List<StudentFeeParams> getStudentFeeParams() {
+		return studentFeeParams;
+	}
+
+	public void setStudentFeeParams(List<StudentFeeParams> studentFeeParams) {
+		this.studentFeeParams = studentFeeParams;
+	}
+
+	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, boolean isActive) {
 		super();
-		this.studentFeeParamsId = studentFeeParamsId;
+		this.studentFeeId = studentFeeId;
 		this.classFee = classFee;
 		this.student = student;
 		this.isActive = isActive;
 	}
 
+	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, boolean isActive, String studentFeeAmt) {
+		super();
+		this.studentFeeId = studentFeeId;
+		this.classFee = classFee;
+		this.student = student;
+		this.isActive = isActive;
+		this.studentFeeAmt = studentFeeAmt;
+	}
 
-
-	
 }

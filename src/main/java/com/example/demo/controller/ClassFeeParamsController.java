@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.ClassFee;
 import com.example.demo.model.ClassFeeParams;
 import com.example.demo.repository.ClassFeeParamsRepository;
-import com.example.demo.repository.ClassFeeRepository;
 
 @RestController
 @RequestMapping("/api")

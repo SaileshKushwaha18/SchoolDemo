@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Student;
-import com.example.demo.repository.StudentClassRepository;
 import com.example.demo.repository.StudentRepository;
 
 @RestController
@@ -22,8 +21,6 @@ public class StudentController {
 
 	@Autowired
 	private StudentRepository studentRepository;
-	@Autowired
-	private StudentClassRepository studentClassRepository;
 	
 	@RequestMapping(value="/students", method=RequestMethod.GET)
 	public List<Student> getStudents(){

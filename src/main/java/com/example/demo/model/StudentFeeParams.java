@@ -15,7 +15,7 @@ public class StudentFeeParams {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_FEE_PARAMS_ID")
-	private Long studentFeeId;
+	private Long studentFeeParamsId;
 	
 	@Column(name="PARAM_TYPE_TXT")
 	private String paramType;
@@ -26,16 +26,13 @@ public class StudentFeeParams {
 	@Column(name="PARAMS_VALUE_TXT")
 	private String value;
 
-	@OneToOne
-	@JoinColumn(name="STUDENT_FEE_ID")
-	private StudentFee studenFee;
-
-	public Long getStudentFeeId() {
-		return studentFeeId;
+	
+	public Long getStudentFeeParamsId() {
+		return studentFeeParamsId;
 	}
 
-	public void setStudentFeeId(Long studentFeeId) {
-		this.studentFeeId = studentFeeId;
+	public void setStudentFeeParamsId(Long studentFeeParamsId) {
+		this.studentFeeParamsId = studentFeeParamsId;
 	}
 
 	public String getParamType() {
@@ -62,21 +59,12 @@ public class StudentFeeParams {
 		this.value = value;
 	}
 
-	public StudentFee getStudenFee() {
-		return studenFee;
-	}
-
-	public void setStudenFee(StudentFee studenFee) {
-		this.studenFee = studenFee;
-	}
-
-	public StudentFeeParams(Long studentFeeId, String paramType, String name, String value, StudentFee studenFee) {
+	public StudentFeeParams(Long studentFeeParamsId, String paramType, String name, String value) {
 		super();
-		this.studentFeeId = studentFeeId;
+		this.studentFeeParamsId = studentFeeParamsId;
 		this.paramType = paramType;
 		this.name = name;
 		this.value = value;
-		this.studenFee = studenFee;
 	}
 
 	public StudentFeeParams() {
