@@ -28,8 +28,8 @@ public class ClassFeeParams {
 	//@Column(name="PARAMS_NAME_TXT")
 	private ClassFeeType classFeeType;
 	
-	@Column(name="PARAMS_VALUE_TXT")
-	private String value;
+	@Column(name="FEE_AMT")
+	private String feeAmount;
     
 
 	public Long getClassFeeParamsId() {
@@ -48,13 +48,6 @@ public class ClassFeeParams {
 //		this.name = name;
 //	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 
 //	public ClassFeeParams(Long classFeeParamsId, String name, String value) {
 //		super();
@@ -76,11 +69,19 @@ public class ClassFeeParams {
 		this.classFeeType = classFeeType;
 	}
 
-	public ClassFeeParams(Long classFeeParamsId, ClassFeeType classFeeType, String value) {
+	public String getFeeAmount() {
+		return feeAmount;
+	}
+
+	public void setFeeAmount(String feeAmount) {
+		this.feeAmount = feeAmount;
+	}
+
+	public ClassFeeParams(Long classFeeParamsId, ClassFeeType classFeeType, String feeAmount) {
 		super();
 		this.classFeeParamsId = classFeeParamsId;
 		this.classFeeType = classFeeType;
-		this.value = value;
+		this.feeAmount = feeAmount;
 	}
 
 }

@@ -5,8 +5,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class AppUserController {
@@ -37,12 +40,13 @@ public class AppUserController {
 	public ResponseEntity<AppUser> getAppUser(@RequestBody AppUser appUser){
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Allow", "OPTIONS,HEAD,GET,POST,PUT");
-		AppUser appUser1= appUserRepository.findByEmail(appUser.getEmail());
+		/*AppUser appUser1= appUserRepository.findByEmail(appUser.getEmail());
 		if(!appUser.getPassword().equals(appUser1.getPassword()) || !appUser.getEmail().equals(appUser1.getEmail())){
 			return new ResponseEntity<AppUser>(appUser1,HttpStatus.BAD_REQUEST);
 		}
-		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());
-		return new ResponseEntity<AppUser>(appUser1,headers, HttpStatus.OK);
+		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());*/
+		//return new ResponseEntity<AppUser>(appUser1,headers, HttpStatus.OK);
+		return new ResponseEntity<AppUser>(appUser,headers, HttpStatus.OK);
 	}
 	
 	

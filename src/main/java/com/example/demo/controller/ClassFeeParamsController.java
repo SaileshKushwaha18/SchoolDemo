@@ -39,10 +39,10 @@ public class ClassFeeParamsController {
 	
 	@RequestMapping(value="/classfeeparams", method=RequestMethod.POST)
 	public ResponseEntity<ClassFeeParams>  addClassFeeParams(@RequestBody ClassFeeParams classFeeParams) {
-		if(classFeeParams !=null && classFeeParamsRepository.findByName(classFeeParams.getName()) !=null) {
+		/*if(classFeeParams !=null && classFeeParamsRepository.findByName(classFeeParams.getName()) !=null) {
 			throw new RuntimeException("Class Fee Params  already exist");
 			//return new ResponseEntity<Student>(HttpStatus.BAD_REQUEST);
-		}
+		}*/
 		
 		return new ResponseEntity<ClassFeeParams>(classFeeParamsRepository.save(classFeeParams), HttpStatus.OK);
 	}

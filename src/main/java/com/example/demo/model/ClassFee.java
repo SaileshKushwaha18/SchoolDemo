@@ -45,8 +45,8 @@ public class ClassFee {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate;
 
-	@Column(name="FEE_AMT")
-	private String classFeeAmount;
+	//@Column(name="FEE_AMT")
+	//private String classFeeAmount;
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@OneToMany
@@ -64,13 +64,13 @@ public class ClassFee {
 		this.classFeeId = classFeeId;
 	}
 
-	public String getClassFeeAmount() {
+	/*public String getClassFeeAmount() {
 		return classFeeAmount;
 	}
 
 	public void setClassFeeAmount(String classFeeAmount) {
 		this.classFeeAmount = classFeeAmount;
-	}
+	}*/
 
 	public String getName() {
 		return name;
