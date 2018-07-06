@@ -18,7 +18,7 @@ public class ClassFeeType {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="FEE_TYPE_ID")
-	private Long id;
+	private Long classFeeTypeId;
 	
 	@Column(name="FEE_TYPE_NAME_TXT")
 	private String name;
@@ -29,12 +29,13 @@ public class ClassFeeType {
 	@Column(name="FEE_TYPE_FREQ_TXT")
 	private Integer frequency;
 
-	public Long getId() {
-		return id;
+
+	public Long getClassFeeTypeId() {
+		return classFeeTypeId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setClassFeeTypeId(Long classFeeTypeId) {
+		this.classFeeTypeId = classFeeTypeId;
 	}
 
 	public String getName() {
@@ -61,9 +62,11 @@ public class ClassFeeType {
 		this.frequency = frequency;
 	}
 
-	public ClassFeeType(Long id, String name, String description, Integer frequency) {
+
+
+	public ClassFeeType(Long classFeeTypeId, String name, String description, Integer frequency) {
 		super();
-		this.id = id;
+		this.classFeeTypeId = classFeeTypeId;
 		this.name = name;
 		this.description = description;
 		this.frequency = frequency;

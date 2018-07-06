@@ -9,5 +9,5 @@ import com.example.demo.model.ClassFeeParams;
 @Repository
 @RepositoryRestController
 public interface ClassFeeParamsRepository extends CrudRepository<ClassFeeParams, Long> {
-	ClassFeeParams findByName(String name);
+	//ClassFeeParams findByName(String name);
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,8 +21,12 @@ public class ClassFeeParams {
 	@Column(name="CLASS_FEE_PARAMS_ID")
 	private Long classFeeParamsId;
 	
-	@Column(name="PARAMS_NAME_TXT")
-	private String name;
+//	@Column(name="PARAMS_NAME_TXT")
+//	//private String name;
+
+	@OneToOne
+	//@Column(name="PARAMS_NAME_TXT")
+	private ClassFeeType classFeeType;
 	
 	@Column(name="PARAMS_VALUE_TXT")
 	private String value;
@@ -35,13 +40,13 @@ public class ClassFeeParams {
 		this.classFeeParamsId = classFeeParamsId;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
 
 	public String getValue() {
 		return value;
@@ -51,16 +56,31 @@ public class ClassFeeParams {
 		this.value = value;
 	}
 
-	public ClassFeeParams(Long classFeeParamsId, String name, String value) {
-		super();
-		this.classFeeParamsId = classFeeParamsId;
-		this.name = name;
-		this.value = value;
-	}
+//	public ClassFeeParams(Long classFeeParamsId, String name, String value) {
+//		super();
+//		this.classFeeParamsId = classFeeParamsId;
+//		this.name = name;
+//		this.value = value;
+//	}
 
 	public ClassFeeParams() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public ClassFeeType getClassFeeType() {
+		return classFeeType;
+	}
+
+	public void setClassFeeType(ClassFeeType classFeeType) {
+		this.classFeeType = classFeeType;
+	}
+
+	public ClassFeeParams(Long classFeeParamsId, ClassFeeType classFeeType, String value) {
+		super();
+		this.classFeeParamsId = classFeeParamsId;
+		this.classFeeType = classFeeType;
+		this.value = value;
 	}
 
 }
