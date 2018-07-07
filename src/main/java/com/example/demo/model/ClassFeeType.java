@@ -27,7 +27,7 @@ public class ClassFeeType {
 	private String description;
 	
 	@Column(name="FEE_TYPE_FREQ_TXT")
-	private Integer frequency;
+	private String frequency;
 
 
 	public Long getClassFeeTypeId() {
@@ -54,17 +54,17 @@ public class ClassFeeType {
 		this.description = description;
 	}
 
-	public Integer getFrequency() {
+	public String getFrequency() {
 		return frequency;
 	}
 
-	public void setFrequency(Integer frequency) {
+	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
 
 
 
-	public ClassFeeType(Long classFeeTypeId, String name, String description, Integer frequency) {
+	public ClassFeeType(Long classFeeTypeId, String name, String description, String frequency) {
 		super();
 		this.classFeeTypeId = classFeeTypeId;
 		this.name = name;
