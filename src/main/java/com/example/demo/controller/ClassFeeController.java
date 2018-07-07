@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.ClassFee;
+import com.example.demo.model.ClassFeeParams;
+import com.example.demo.model.StudentClass;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
 
@@ -76,5 +78,13 @@ public class ClassFeeController {
 		}
 		classFeeRepository.deleteById(id);
 		return new ResponseEntity<ClassFee>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/generatestudentfee", method=RequestMethod.POST)
+	public ResponseEntity<ClassFee>  generateStudentFee(@RequestBody ClassFee classFee, @RequestBody List<StudentClass>  StudentClass) {
+		System.out.println("===========generateStudentFee============="+classFee + StudentClass);
+		
+		//System.out.println("===========classFee============="+classFee);
+		return new ResponseEntity<ClassFee>(classFee, HttpStatus.OK);
 	}
 }
