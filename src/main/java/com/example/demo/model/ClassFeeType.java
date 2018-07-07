@@ -76,5 +76,11 @@ public class ClassFeeType {
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "ClassFeeType [classFeeTypeId=" + classFeeTypeId + ", name=" + name + ", description=" + description
+				+ ", frequency=" + frequency + "]";
+	}
+
 
 }

@@ -14,13 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.ClassFee;
+import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
+
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ClassFeeController {
 	@Autowired
 	private ClassFeeRepository classFeeRepository;
+	
+	@Autowired
+	private ClassFeeParamsRepository classFeeParamsRepository;
 	
 	@RequestMapping(value="/classfee", method=RequestMethod.GET)
 	public List<ClassFee> getClassFees(){
@@ -39,17 +44,22 @@ public class ClassFeeController {
 	
 	@RequestMapping(value="/classfee", method=RequestMethod.POST)
 	public ResponseEntity<ClassFee>  addClassFee(@RequestBody ClassFee classFee) {
+		System.out.println("===========AddClassFee============="+classFee);
 		if(classFee !=null && classFeeRepository.findByName(classFee.getName()) !=null) {
 			throw new RuntimeException("Class Fee already exist");
 			//return new ResponseEntity<Student>(HttpStatus.BAD_REQUEST);
 		}
+		System.out.println("===========UpdateclassFee classFee.getClassFeeParams()============="+classFee);
+		classFeeParamsRepository.saveAll(classFee.getClassFeeParams());
 		
+		//System.out.println("===========classFee============="+classFee);
 		return new ResponseEntity<ClassFee>(classFeeRepository.save(classFee), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/classfee", method=RequestMethod.PUT)
 	public ResponseEntity<ClassFee>  updateClassFee(@RequestBody ClassFee classFee) {	
-	
+		System.out.println("===========UpdateclassFee classFee.getClassFeeParams()============="+classFee);
+		classFeeParamsRepository.saveAll(classFee.getClassFeeParams());
 		return new ResponseEntity<ClassFee>(classFeeRepository.save(classFee), HttpStatus.OK);
 	}
 	

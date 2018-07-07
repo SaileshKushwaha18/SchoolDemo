@@ -48,7 +48,7 @@ public class ClassFee {
 	//@Column(name="FEE_AMT")
 	//private String classFeeAmount;
 	
-	@JsonProperty(access = Access.READ_ONLY)
+	//@JsonProperty(access = Access.READ_ONLY)
 	@OneToMany
     @JoinTable(name="CLASSFEE_CLASSFEEPARAMS",
     joinColumns={@JoinColumn(name="CLASS_FEE_ID", referencedColumnName="CLASS_FEE_ID")},
@@ -118,6 +118,17 @@ public class ClassFee {
 		this.endDate = endDate;
 	}
 
+
+	public ClassFee(Long classFeeId, String name, String description, Date startDate, Date endDate,
+			List<ClassFeeParams> classFeeParams) {
+		super();
+		this.classFeeId = classFeeId;
+		this.name = name;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.classFeeParams = classFeeParams;
+	}
 
 	public List<ClassFeeParams> getClassFeeParams() {
 		return classFeeParams;

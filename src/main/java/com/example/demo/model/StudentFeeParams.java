@@ -70,6 +70,12 @@ public class StudentFeeParams {
 	public StudentFeeParams() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "StudentFeeParams [studentFeeParamsId=" + studentFeeParamsId + ", paramType=" + paramType + ", name="
+				+ name + ", value=" + value + "]";
 	} 
 	
 	

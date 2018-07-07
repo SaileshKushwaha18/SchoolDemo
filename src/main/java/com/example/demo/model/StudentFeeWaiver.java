@@ -72,5 +72,11 @@ public class StudentFeeWaiver {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public String toString() {
+		return "StudentFeeWaiver [studentFeeWaiverId=" + studentFeeWaiverId + ", classFeeType=" + classFeeType
+				+ ", student=" + student + ", feeWaiverPer=" + feeWaiverPer + "]";
+	}
 	
 }

@@ -84,4 +84,10 @@ public class ClassFeeParams {
 		this.feeAmount = feeAmount;
 	}
 
+	@Override
+	public String toString() {
+		return "ClassFeeParams [classFeeParamsId=" + classFeeParamsId + ", classFeeType=" + classFeeType
+				+ ", feeAmount=" + feeAmount + "]";
+	}
+
 }

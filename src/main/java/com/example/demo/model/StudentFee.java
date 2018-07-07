@@ -116,4 +116,11 @@ public class StudentFee {
 		this.studentFeeAmt = studentFeeAmt;
 	}
 
+	@Override
+	public String toString() {
+		return "StudentFee [studentFeeId=" + studentFeeId + ", classFee=" + classFee + ", student=" + student
+				+ ", isActive=" + isActive + ", studentFeeAmt=" + studentFeeAmt + ", studentFeeParams="
+				+ studentFeeParams + "]";
+	}
+
 }
