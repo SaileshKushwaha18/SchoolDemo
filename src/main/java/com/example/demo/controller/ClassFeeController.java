@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.ClassFee;
 import com.example.demo.model.ClassFeeParams;
+import com.example.demo.model.GenerateFee;
 import com.example.demo.model.StudentClass;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
@@ -80,11 +81,11 @@ public class ClassFeeController {
 		return new ResponseEntity<ClassFee>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/generatestudentfee", method=RequestMethod.POST)
-	public ResponseEntity<ClassFee>  generateStudentFee(@RequestBody ClassFee classFee, @RequestBody List<StudentClass>  StudentClass) {
-		System.out.println("===========generateStudentFee============="+classFee + StudentClass);
+	@RequestMapping(value="/generatestudentfee" , method=RequestMethod.POST)
+	public ResponseEntity<GenerateFee>  generateStudentFee(@RequestBody GenerateFee generateFee) {
+		System.out.println("===========generateStudentFee============="+generateFee);
 		
 		//System.out.println("===========classFee============="+classFee);
-		return new ResponseEntity<ClassFee>(classFee, HttpStatus.OK);
+		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
 }
