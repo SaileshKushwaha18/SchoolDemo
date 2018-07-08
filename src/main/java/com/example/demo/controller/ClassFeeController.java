@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.ClassFee;
 import com.example.demo.model.ClassFeeParams;
 import com.example.demo.model.GenerateFee;
+import com.example.demo.model.Student;
 import com.example.demo.model.StudentClass;
+import com.example.demo.model.StudentFee;
+import com.example.demo.model.StudentFeeParams;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
+import com.example.demo.repository.StudentFeeParamsRepository;
+import com.example.demo.repository.StudentFeeRepository;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -26,6 +32,12 @@ import com.example.demo.repository.ClassFeeRepository;
 public class ClassFeeController {
 	@Autowired
 	private ClassFeeRepository classFeeRepository;
+	
+	@Autowired
+	private StudentFeeRepository studentFeeRepository;
+	
+	@Autowired
+	private StudentFeeParamsRepository studentFeeParamsRepository;
 	
 	@Autowired
 	private ClassFeeParamsRepository classFeeParamsRepository;
@@ -83,9 +95,41 @@ public class ClassFeeController {
 	
 	@RequestMapping(value="/generatestudentfee" , method=RequestMethod.POST)
 	public ResponseEntity<GenerateFee>  generateStudentFee(@RequestBody GenerateFee generateFee) {
-		System.out.println("===========generateStudentFee============="+generateFee);
+
 		
 		//System.out.println("===========classFee============="+classFee);
+		List<StudentFee> studentFees = new ArrayList<>();
+		List<StudentFeeParams> studentFeeParams = new ArrayList<>();
+		
+		ClassFee classFee = generateFee.getClassFee();
+		for(ClassFeeParams classFeeParam : classFee.getClassFeeParams()){
+			StudentFeeParams studentFeeParams1 = new StudentFeeParams();
+			studentFeeParams1.setName(classFeeParam.getClassFeeType().getName());
+			studentFeeParams1.setValue(classFeeParam.getFeeAmount());
+			studentFeeParams1.setParamType(classFeeParam.getClassFeeType().getFrequency());
+			
+			studentFeeParams.add(studentFeeParams1);
+		}
+		
+		List<StudentClass> studentClasses= generateFee.getStudentClass();
+		
+		for(StudentClass studentClass : studentClasses){
+			List<Student> students = studentClass.getStudents();
+			for(Student student : students){
+				StudentFee studentFee = new StudentFee();
+				studentFee.setClassFee(classFee);
+				studentFee.setStudent(student);
+				studentFee.setStudentFeeParams(studentFeeParams);
+				
+				studentFees.add(studentFee);
+			}
+			
+		}
+		System.out.println("===========generateStudentFee============="+studentClasses.toString());
+		
+		studentFeeParamsRepository.saveAll(studentFeeParams);
+		studentFeeRepository.saveAll(studentFees);
+
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
 }
