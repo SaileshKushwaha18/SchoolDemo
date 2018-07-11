@@ -1,9 +1,15 @@
 package com.example.demo.model;
+import java.io.Serializable;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class GenerateFee {
+public class GenerateFee  implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ClassFee classFee;
 	
 	@JsonFormat

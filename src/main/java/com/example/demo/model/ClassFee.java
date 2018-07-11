@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,12 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
  */
 @Entity
 @Table(name="CLASS_FEE")
-public class ClassFee {
+public class ClassFee  implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

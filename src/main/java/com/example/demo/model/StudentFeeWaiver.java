@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="STUDENT_FEE_WAIVER")
-public class StudentFeeWaiver {
+public class StudentFeeWaiver  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_FEE_WAIVER_ID")

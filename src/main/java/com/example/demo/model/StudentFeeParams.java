@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="STUDENT_FEE_PARAMS")
-public class StudentFeeParams {
+public class StudentFeeParams  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="STUDENT_FEE_PARAMS_ID")
@@ -26,6 +33,10 @@ public class StudentFeeParams {
 	@Column(name="PARAMS_VALUE_TXT")
 	private String value;
 
+	@OneToOne
+	@JoinColumn(name="CLASS_FEE_ID")
+	private ClassFee classFee;
+	
 	
 	public Long getStudentFeeParamsId() {
 		return studentFeeParamsId;
@@ -59,12 +70,30 @@ public class StudentFeeParams {
 		this.value = value;
 	}
 
+	public ClassFee getClassFee() {
+		return classFee;
+	}
+
+	public void setClassFee(ClassFee classFee) {
+		this.classFee = classFee;
+	}
+
 	public StudentFeeParams(Long studentFeeParamsId, String paramType, String name, String value) {
 		super();
 		this.studentFeeParamsId = studentFeeParamsId;
 		this.paramType = paramType;
 		this.name = name;
 		this.value = value;
+	}
+
+	
+	public StudentFeeParams(Long studentFeeParamsId, String paramType, String name, String value, ClassFee classFee) {
+		super();
+		this.studentFeeParamsId = studentFeeParamsId;
+		this.paramType = paramType;
+		this.name = name;
+		this.value = value;
+		this.classFee = classFee;
 	}
 
 	public StudentFeeParams() {
@@ -75,7 +104,7 @@ public class StudentFeeParams {
 	@Override
 	public String toString() {
 		return "StudentFeeParams [studentFeeParamsId=" + studentFeeParamsId + ", paramType=" + paramType + ", name="
-				+ name + ", value=" + value + "]";
+				+ name + ", value=" + value + ", classFee=" + classFee + "]";
 	} 
 	
 	

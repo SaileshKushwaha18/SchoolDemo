@@ -21,6 +21,7 @@ import com.example.demo.model.Student;
 import com.example.demo.model.StudentClass;
 import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentFeeParams;
+import com.example.demo.model.StudentFeeWaiver;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
 import com.example.demo.repository.StudentFeeParamsRepository;
@@ -96,36 +97,57 @@ public class ClassFeeController {
 	@RequestMapping(value="/generatestudentfee" , method=RequestMethod.POST)
 	public ResponseEntity<GenerateFee>  generateStudentFee(@RequestBody GenerateFee generateFee) {
 
-		
-		//System.out.println("===========classFee============="+classFee);
 		List<StudentFee> studentFees = new ArrayList<>();
 		List<StudentFeeParams> studentFeeParams = new ArrayList<>();
 		
+		// Copying ClassFee Params to StudentFee Params.
 		ClassFee classFee = generateFee.getClassFee();
 		for(ClassFeeParams classFeeParam : classFee.getClassFeeParams()){
 			StudentFeeParams studentFeeParams1 = new StudentFeeParams();
 			studentFeeParams1.setName(classFeeParam.getClassFeeType().getName());
 			studentFeeParams1.setValue(classFeeParam.getFeeAmount());
 			studentFeeParams1.setParamType(classFeeParam.getClassFeeType().getFrequency());
+			studentFeeParams1.setClassFee(classFee);
 			
+			//System.out.println("============studentFeeParams1=================" + studentFeeParams1.toString());
 			studentFeeParams.add(studentFeeParams1);
+			
 		}
 		
+		//adding the copied studentFeeParams to StudentFee
+		// calculating StudentFeeAmt based on the studentFeeParams total value.
 		List<StudentClass> studentClasses= generateFee.getStudentClass();
 		
 		for(StudentClass studentClass : studentClasses){
 			List<Student> students = studentClass.getStudents();
+			Integer studentTotalAmt =0 ;
 			for(Student student : students){
 				StudentFee studentFee = new StudentFee();
 				studentFee.setClassFee(classFee);
 				studentFee.setStudent(student);
 				studentFee.setStudentFeeParams(studentFeeParams);
+				studentFee.setStudentClass(studentClass);
+				
+				//getting student Fee Waivers.
+				for(StudentFeeWaiver studentFeeWaiver : student.getStudenFeeWaivers()){
+					System.out.println("===studentFeeWaiver====="+studentFeeWaiver.toString());
+					// TODO feewaivers will be added subtracted when we work on Waiver part.
+				}
+				
+				//setting StudentFeeAmount.
+				for(StudentFeeParams studentFeeParam : studentFeeParams){
+					if(!studentFeeParam.getValue().isEmpty()){
+						studentTotalAmt = studentTotalAmt + Integer.parseInt(studentFeeParam.getValue());
+					}
+				}
+				
+				studentFee.setStudentFeeAmt(studentTotalAmt);
 				
 				studentFees.add(studentFee);
 			}
 			
 		}
-		System.out.println("===========generateStudentFee============="+studentClasses.toString());
+		//System.out.println("===========generateStudentFee============="+studentClasses.toString());
 		
 		studentFeeParamsRepository.saveAll(studentFeeParams);
 		studentFeeRepository.saveAll(studentFees);
