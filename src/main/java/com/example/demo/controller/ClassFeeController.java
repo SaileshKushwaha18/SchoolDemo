@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,6 +126,25 @@ public class ClassFeeController {
 				StudentFee studentFee = new StudentFee();
 				studentFee.setClassFee(classFee);
 				studentFee.setStudent(student);
+				studentFee.setStartDate(new Date());
+				studentFee.setEndDate(null);
+				
+				//adding student previous Fees / dues to student params.
+				List<StudentFee> studentsFees = (List<StudentFee>) studentFeeRepository.findAll();
+				for(StudentFee stdFee : studentsFees){
+					if(stdFee.getStudent().getStudentId().equals(student.getStudentId())){
+						if(stdFee.getEndDate() == null){
+							StudentFeeParams studentFeeParams2 = new StudentFeeParams();
+							studentFeeParams2.setName("Dues");
+							studentFeeParams2.setValue(stdFee.getStudentBalanceFeeAmt().toString());
+							studentFeeParams2.setParamType("M");
+							studentFeeParams2.setClassFee(classFee);
+							
+							studentFeeParams.add(studentFeeParams2);
+						}
+					}
+				}
+				
 				studentFee.setStudentFeeParams(studentFeeParams);
 				studentFee.setStudentClass(studentClass);
 				

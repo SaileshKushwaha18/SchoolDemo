@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -43,6 +44,12 @@ public class StudentFee implements Serializable{
 	@Column(name="ACTIVE_FLG")
 	private boolean isActive;
 	
+	@Column(name="START_DT")
+	private Date startDate; 
+	
+	@Column(name="END_DT")
+	private Date endDate; 
+	
 	@Column(name="STUDENT_FEE_AMT")
 	private Integer studentFeeAmt;
 	
@@ -51,6 +58,7 @@ public class StudentFee implements Serializable{
 
 	@Column(name="STUDENT_BALANCE_FEE_AMT")
 	private Integer studentBalanceFeeAmt;
+	
 	
 	//@JsonProperty(access = Access.READ_ONLY)
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -114,6 +122,22 @@ public class StudentFee implements Serializable{
 	}
 
 
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public void setStudentFeeAmt(Integer studentFeeAmt) {
 		this.studentFeeAmt = studentFeeAmt;
 	}
@@ -172,9 +196,10 @@ public class StudentFee implements Serializable{
 	@Override
 	public String toString() {
 		return "StudentFee [studentFeeId=" + studentFeeId + ", classFee=" + classFee + ", student=" + student
-				+ ", studentClass=" + studentClass + ", isActive=" + isActive + ", studentFeeAmt=" + studentFeeAmt
-				+ ", studentPaidFeeAmt=" + studentPaidFeeAmt + ", studentBalanceFeeAmt=" + studentBalanceFeeAmt
-				+ ", studentFeeParams=" + studentFeeParams + "]";
+				+ ", studentClass=" + studentClass + ", isActive=" + isActive + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", studentFeeAmt=" + studentFeeAmt + ", studentPaidFeeAmt="
+				+ studentPaidFeeAmt + ", studentBalanceFeeAmt=" + studentBalanceFeeAmt + ", studentFeeParams="
+				+ studentFeeParams + "]";
 	}
 
 
@@ -187,6 +212,23 @@ public class StudentFee implements Serializable{
 		this.student = student;
 		this.studentClass = studentClass;
 		this.isActive = isActive;
+		this.studentFeeAmt = studentFeeAmt;
+		this.studentPaidFeeAmt = studentPaidFeeAmt;
+		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
+		this.studentFeeParams = studentFeeParams;
+	}
+
+	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, StudentClass studentClass,
+			boolean isActive, Date startDate, Date endDate, Integer studentFeeAmt, Integer studentPaidFeeAmt,
+			Integer studentBalanceFeeAmt, List<StudentFeeParams> studentFeeParams) {
+		super();
+		this.studentFeeId = studentFeeId;
+		this.classFee = classFee;
+		this.student = student;
+		this.studentClass = studentClass;
+		this.isActive = isActive;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.studentFeeAmt = studentFeeAmt;
 		this.studentPaidFeeAmt = studentPaidFeeAmt;
 		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
