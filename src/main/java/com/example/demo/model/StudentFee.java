@@ -42,7 +42,7 @@ public class StudentFee implements Serializable{
 	private StudentClass studentClass;
 	
 	@Column(name="ACTIVE_FLG")
-	private boolean isActive;
+	private boolean isActive = true;
 	
 	@Column(name="START_DT")
 	private Date startDate; 
@@ -195,8 +195,8 @@ public class StudentFee implements Serializable{
 
 	@Override
 	public String toString() {
-		return "StudentFee [studentFeeId=" + studentFeeId + ", classFee=" + classFee + ", student=" + student
-				+ ", studentClass=" + studentClass + ", isActive=" + isActive + ", startDate=" + startDate
+		return "StudentFee [studentFeeId=" + studentFeeId 
+				+ ", isActive=" + isActive + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", studentFeeAmt=" + studentFeeAmt + ", studentPaidFeeAmt="
 				+ studentPaidFeeAmt + ", studentBalanceFeeAmt=" + studentBalanceFeeAmt + ", studentFeeParams="
 				+ studentFeeParams + "]";

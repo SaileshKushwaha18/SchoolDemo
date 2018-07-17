@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Student;
 import com.example.demo.model.StudentFee;
 import com.example.demo.repository.StudentFeeRepository;
+import com.example.demo.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -21,18 +23,46 @@ public class StudentFeeController {
 	@Autowired
 	private StudentFeeRepository studentFeeRepository;
 	
+	@Autowired
+	private StudentRepository studentRepository;
+	
 	@RequestMapping(value="/studentfees", method=RequestMethod.GET)
 	public List<StudentFee> getStudentFees(){
 		return (List<StudentFee>) studentFeeRepository.findAll();
 	}
 	
+//	@RequestMapping(value="/studentfees/{id}", method=RequestMethod.GET)
+//	public Optional<StudentFee>  getStudentFeesById(@PathVariable Long id){
+//		System.out.println("=============StudentId==============="+id);
+//		Optional<StudentFee> class1 = studentFeeRepository.findById(id);
+//		if( class1 == null){
+//			throw new RuntimeException("Student Fee do not exist");
+//		}
+//		return class1;
+//	}
+	
 	@RequestMapping(value="/studentfees/{id}", method=RequestMethod.GET)
-	public Optional<StudentFee>  getStudentFeesById(@PathVariable Long id){
-		Optional<StudentFee> class1 = studentFeeRepository.findById(id);
-		if( class1 == null){
-			throw new RuntimeException("Student Fee do not exist");
+	public ResponseEntity<StudentFee>  getStudentFeesByStudentId1(@PathVariable Long id){
+		System.out.println("=============getStudentFeesByStudentId1==============="+id);
+		
+		// implemented to show the latest studentFee when generated.
+		for(Student student : studentRepository.findAll()){
+			if(student.getStudentId().equals(id)){
+				List<StudentFee> srudentFees = studentFeeRepository.findByStudent(student);
+				 System.out.println("=====srudentFees========="+srudentFees.toString());
+				 for(StudentFee stdFee : srudentFees){
+					 if(stdFee.isActive()){
+						System.out.println("=====stdFee========="+stdFee.toString());
+						 return new ResponseEntity<StudentFee>(studentFeeRepository.save(stdFee), HttpStatus.OK);
+					 }
+//					 else{
+//						 return new ResponseEntity<StudentFee>(studentFeeRepository.save(stdFee), HttpStatus.OK);
+//					 }
+				 }
+			}
 		}
-		return class1;
+		 
+		 return new ResponseEntity<StudentFee>(new StudentFee(),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/studentfees", method=RequestMethod.POST)

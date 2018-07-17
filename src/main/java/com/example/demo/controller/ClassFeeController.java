@@ -133,10 +133,10 @@ public class ClassFeeController {
 				List<StudentFee> studentsFees = (List<StudentFee>) studentFeeRepository.findAll();
 				for(StudentFee stdFee : studentsFees){
 					if(stdFee.getStudent().getStudentId().equals(student.getStudentId())){
-						if(stdFee.getEndDate() == null){
+						if(stdFee.isActive()){
 							StudentFeeParams studentFeeParams2 = new StudentFeeParams();
 							studentFeeParams2.setName("Dues");
-							studentFeeParams2.setValue(stdFee.getStudentBalanceFeeAmt().toString());
+							studentFeeParams2.setValue(stdFee.getStudentBalanceFeeAmt() == null ? "" : stdFee.getStudentBalanceFeeAmt().toString());
 							studentFeeParams2.setParamType("M");
 							studentFeeParams2.setClassFee(classFee);
 							
