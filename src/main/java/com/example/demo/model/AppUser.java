@@ -91,8 +91,8 @@ public class AppUser {
 
 	@Override
 	public String toString() {
-		return "AppUser [id=" + id + ", username=" + username + ", password=" + password + ", getId()=" + getId()
-				+ ", getUserName()=" + getUsername() + ", getPassword()=" + getPassword() + "]";
+		return "AppUser [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", userId=" + userId + ", userType=" + userType + "]";
 	}
 
 	public AppUser(Long id, String username, String password) {
