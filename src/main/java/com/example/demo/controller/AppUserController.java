@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.AppUser;
 import com.example.demo.repository.AppUserRepository;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class AppUserController {
@@ -38,15 +37,15 @@ public class AppUserController {
 	
 	@RequestMapping(value="/users/login", method=RequestMethod.POST)
 	public ResponseEntity<AppUser> getAppUser(@RequestBody AppUser appUser){
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Allow", "OPTIONS,HEAD,GET,POST,PUT");
-		/*AppUser appUser1= appUserRepository.findByEmail(appUser.getEmail());
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Allow", "OPTIONS,HEAD,GET,POST,PUT");
+		AppUser appUser1= appUserRepository.findByEmail(appUser.getEmail());
 		if(!appUser.getPassword().equals(appUser1.getPassword()) || !appUser.getEmail().equals(appUser1.getEmail())){
 			return new ResponseEntity<AppUser>(appUser1,HttpStatus.BAD_REQUEST);
 		}
-		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());*/
+		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());
 		//return new ResponseEntity<AppUser>(appUser1,headers, HttpStatus.OK);
-		return new ResponseEntity<AppUser>(appUser,headers, HttpStatus.OK);
+		return new ResponseEntity<AppUser>(appUser,HttpStatus.OK);
 	}
 	
 	
