@@ -37,13 +37,14 @@ public class AppUserController {
 	
 	@RequestMapping(value="/users/login", method=RequestMethod.POST)
 	public ResponseEntity<AppUser> getAppUser(@RequestBody AppUser appUser){
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("Allow", "OPTIONS,HEAD,GET,POST,PUT");
-		AppUser appUser1= appUserRepository.findByEmail(appUser.getEmail());
-		if(!appUser.getPassword().equals(appUser1.getPassword()) || !appUser.getEmail().equals(appUser1.getEmail())){
+		//System.out.println("=============getAppUser=============="+appUser.toString());
+		AppUser appUser1= appUserRepository.findByEmail(appUser.getUsername());
+		//System.out.println("=============appUser1 email=============="+appUser1.toString());
+		if(!appUser.getPassword().equals(appUser1.getPassword())){
+			//System.out.println("=============Inside Bad Request=============="+appUser1.toString());
 			return new ResponseEntity<AppUser>(appUser1,HttpStatus.BAD_REQUEST);
 		}
-		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());
+		//System.out.println(appUser.getEmail() + "============" + appUser.getPassword());
 		//return new ResponseEntity<AppUser>(appUser1,headers, HttpStatus.OK);
 		return new ResponseEntity<AppUser>(appUser,HttpStatus.OK);
 	}

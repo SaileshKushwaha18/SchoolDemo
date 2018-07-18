@@ -28,7 +28,6 @@ import com.example.demo.repository.ClassFeeRepository;
 import com.example.demo.repository.StudentFeeParamsRepository;
 import com.example.demo.repository.StudentFeeRepository;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ClassFeeController {

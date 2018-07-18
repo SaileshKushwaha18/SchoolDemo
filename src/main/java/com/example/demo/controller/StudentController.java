@@ -17,7 +17,7 @@ import com.example.demo.model.Student;
 import com.example.demo.repository.StudentRepository;
 
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+
 @RestController
 @RequestMapping("/api")
 public class StudentController {

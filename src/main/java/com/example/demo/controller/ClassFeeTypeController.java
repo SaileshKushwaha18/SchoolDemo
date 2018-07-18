@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.ClassFeeType;
 import com.example.demo.repository.ClassFeeTypeRepository;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class ClassFeeTypeController {
