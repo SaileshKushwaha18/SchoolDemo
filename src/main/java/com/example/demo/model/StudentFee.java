@@ -13,8 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="STUDENT_FEE")
@@ -66,6 +69,10 @@ public class StudentFee implements Serializable{
     joinColumns={@JoinColumn(name="STUDENT_FEE_ID", referencedColumnName="STUDENT_FEE_ID")},
     inverseJoinColumns={@JoinColumn(name="STUDENT_FEE_PARAMS_ID", referencedColumnName="STUDENT_FEE_PARAMS_ID")})
 	private List<StudentFeeParams> studentFeeParams;
+	
+	@OneToMany
+    @JsonIgnoreProperties("studentFee")
+	private List<StudentPaymentHistory> studentPaymentHistories;
 	
 	public Long getStudentFeeId() {
 		return studentFeeId;
@@ -159,6 +166,15 @@ public class StudentFee implements Serializable{
 		this.studentBalanceFeeAmt = getStudentFeeAmt().intValue() -  getStudentPaidFeeAmt().intValue();
 	}
 
+	
+	public List<StudentPaymentHistory> getStudentPaymentHistories() {
+		return studentPaymentHistories;
+	}
+
+	public void setStudentPaymentHistories(List<StudentPaymentHistory> studentPaymentHistories) {
+		this.studentPaymentHistories = studentPaymentHistories;
+	}
+
 	public StudentFee() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -233,6 +249,25 @@ public class StudentFee implements Serializable{
 		this.studentPaidFeeAmt = studentPaidFeeAmt;
 		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
 		this.studentFeeParams = studentFeeParams;
+	}
+
+	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, StudentClass studentClass,
+			boolean isActive, Date startDate, Date endDate, Integer studentFeeAmt, Integer studentPaidFeeAmt,
+			Integer studentBalanceFeeAmt, List<StudentFeeParams> studentFeeParams,
+			List<StudentPaymentHistory> studentPaymentHistories) {
+		super();
+		this.studentFeeId = studentFeeId;
+		this.classFee = classFee;
+		this.student = student;
+		this.studentClass = studentClass;
+		this.isActive = isActive;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.studentFeeAmt = studentFeeAmt;
+		this.studentPaidFeeAmt = studentPaidFeeAmt;
+		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
+		this.studentFeeParams = studentFeeParams;
+		this.studentPaymentHistories = studentPaymentHistories;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentFee;
+import com.example.demo.model.StudentPaymentHistory;
+import com.example.demo.repository.StudentFeePaymentRepository;
 import com.example.demo.repository.StudentFeeRepository;
 import com.example.demo.repository.StudentRepository;
 
@@ -25,6 +29,9 @@ public class StudentFeeController {
 	
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	@Autowired
+	StudentFeePaymentRepository studentFeePaymentRepository;
 	
 	@RequestMapping(value="/studentfees", method=RequestMethod.GET)
 	public List<StudentFee> getStudentFees(){
@@ -63,6 +70,35 @@ public class StudentFeeController {
 		}
 		 
 		 return new ResponseEntity<StudentFee>(new StudentFee(),HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/studentfees/{id}/payment", method=RequestMethod.POST)
+	public ResponseEntity<StudentFee>  updatePayment(@PathVariable Long id,@RequestBody StudentFee studentFee){
+		 System.out.println("=============UpdatePayment==============="+id);
+		 
+		 List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
+		 
+		 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(id);
+		 studentFee1.get().setStudentPaidFeeAmt(studentFee.getStudentPaidFeeAmt());
+		 if(studentFee.getStudentPaidFeeAmt() !=null && studentFee.getStudentFeeAmt() !=null){
+			 studentFee1.get().setStudentBalanceFeeAmt(studentFee.getStudentFeeAmt() - studentFee.getStudentBalanceFeeAmt());
+		 }
+		 
+		 studentFee1.get().setActive(studentFee.isActive());
+		 studentFee1.get().setEndDate(new Date());
+		 			
+		 StudentPaymentHistory stuPayHist = new StudentPaymentHistory();
+		 stuPayHist.setStudent(studentFee.getStudent());
+		 stuPayHist.setStudentFee(studentFee);
+		 stuPayHist.setStartDate(new Date());
+		 stuPayHist.setPayamentStatus("SUCCESS");
+		 stuPayHist.setStudentFeePaymentAmt(studentFee.getStudentPaidFeeAmt());
+		 studentFeePaymentRepository.save(stuPayHist);
+		 studentPaymentHistories.add(stuPayHist);
+		 studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
+		 
+		 return new ResponseEntity<StudentFee>(studentFeeRepository.save(studentFee1.get()),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/studentfees", method=RequestMethod.POST)
