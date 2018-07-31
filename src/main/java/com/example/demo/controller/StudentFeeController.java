@@ -75,16 +75,20 @@ public class StudentFeeController {
 	
 	@RequestMapping(value="/studentfees/{id}/payment", method=RequestMethod.POST)
 	public ResponseEntity<StudentFee>  updatePayment(@PathVariable Long id,@RequestBody StudentFee studentFee){
-		 System.out.println("=============UpdatePayment==============="+id);
 		 
+		 Integer remainingBalance =0;
 		 List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
 		 
 		 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(id);
 		 studentFee1.get().setStudentPaidFeeAmt(studentFee.getStudentPaidFeeAmt());
-		 if(studentFee.getStudentPaidFeeAmt() !=null && studentFee.getStudentFeeAmt() !=null){
-			 studentFee1.get().setStudentBalanceFeeAmt(studentFee.getStudentFeeAmt() - studentFee.getStudentBalanceFeeAmt());
-		 }
-		 
+			 
+		 if(studentFee1 !=null && studentFee1.get() !=null && studentFee1.get().getStudentBalanceFeeAmt() ==null){ 
+				 remainingBalance = Integer.valueOf(studentFee.getStudentFeeAmt()) - Integer.valueOf(studentFee.getStudentPaidFeeAmt());
+			 } else{
+				 remainingBalance = Integer.valueOf(studentFee1.get().getStudentBalanceFeeAmt()) - Integer.valueOf(studentFee.getStudentPaidFeeAmt());
+			}
+			 
+		 studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
 		 studentFee1.get().setActive(studentFee.isActive());
 		 studentFee1.get().setEndDate(new Date());
 		 			
