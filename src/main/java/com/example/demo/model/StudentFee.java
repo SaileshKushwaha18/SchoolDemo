@@ -163,7 +163,7 @@ public class StudentFee implements Serializable{
 	}
 
 	public void setStudentBalanceFeeAmt(Integer studentBalanceFeeAmt) {
-		this.studentBalanceFeeAmt = getStudentFeeAmt().intValue() -  getStudentPaidFeeAmt().intValue();
+		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
 	}
 
 	
