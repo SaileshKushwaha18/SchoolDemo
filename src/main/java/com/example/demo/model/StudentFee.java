@@ -13,9 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -70,7 +70,7 @@ public class StudentFee implements Serializable{
     inverseJoinColumns={@JoinColumn(name="STUDENT_FEE_PARAMS_ID", referencedColumnName="STUDENT_FEE_PARAMS_ID")})
 	private List<StudentFeeParams> studentFeeParams;
 	
-	@OneToMany
+	@Transient
     @JsonIgnoreProperties("studentFee")
 	private List<StudentPaymentHistory> studentPaymentHistories;
 	
