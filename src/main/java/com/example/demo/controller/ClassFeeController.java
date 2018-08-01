@@ -138,8 +138,9 @@ public class ClassFeeController {
 							studentFeeParams2.setValue(stdFee.getStudentBalanceFeeAmt() == null ? "" : stdFee.getStudentBalanceFeeAmt().toString());
 							studentFeeParams2.setParamType("M");
 							studentFeeParams2.setClassFee(classFee);
-							
 							studentFeeParams.add(studentFeeParams2);
+							stdFee.setActive(false);
+							studentFeeRepository.save(stdFee); // inactive the old fee as we used in new fee as Due
 						}
 					}
 				}
@@ -161,6 +162,7 @@ public class ClassFeeController {
 				}
 				
 				studentFee.setStudentFeeAmt(studentTotalAmt);
+				studentFee.setStudentBalanceFeeAmt(studentTotalAmt);
 				
 				studentFees.add(studentFee);
 			}

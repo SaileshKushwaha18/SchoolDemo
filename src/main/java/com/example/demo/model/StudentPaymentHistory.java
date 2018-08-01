@@ -42,6 +42,9 @@ public class StudentPaymentHistory implements Serializable {
 	
 	@Column(name="STUDENT_FEE_PAYMENT_AMT")
 	private Integer studentFeePaymentAmt;
+	
+	@Column(name="STUDENT_FEE_PAYMENT_CMT")
+	private String studentFeePaymentCmt;
 
 	public Long getStudentFeePaymentId() {
 		return studentFeePaymentId;
@@ -112,6 +115,26 @@ public class StudentPaymentHistory implements Serializable {
 	public StudentPaymentHistory() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getStudentFeePaymentCmt() {
+		return studentFeePaymentCmt;
+	}
+
+	public void setStudentFeePaymentCmt(String studentFeePaymentCmt) {
+		this.studentFeePaymentCmt = studentFeePaymentCmt;
+	}
+
+	public StudentPaymentHistory(Long studentFeePaymentId, Student student, StudentFee studentFee, Date startDate,
+			String payamentStatus, Integer studentFeePaymentAmt, String studentFeePaymentCmt) {
+		super();
+		this.studentFeePaymentId = studentFeePaymentId;
+		this.student = student;
+		this.studentFee = studentFee;
+		this.startDate = startDate;
+		this.payamentStatus = payamentStatus;
+		this.studentFeePaymentAmt = studentFeePaymentAmt;
+		this.studentFeePaymentCmt = studentFeePaymentCmt;
 	}
 	
 	
