@@ -53,6 +53,15 @@ public class StudentFeeController {
 	@RequestMapping(value = "/studentfees/{id}", method = RequestMethod.GET)
 	public ResponseEntity<StudentFee> getStudentFeesByStudentId1(@PathVariable Long id) {
 		System.out.println("=============getStudentFeesByStudentId1===============" + id);
+		
+		List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
+		List<StudentPaymentHistory> studentPaymentHistories1 = (List<StudentPaymentHistory>) studentFeePaymentRepository.findAll();
+		
+		for(StudentPaymentHistory studentPayHistory : studentPaymentHistories1){
+			if(studentPayHistory.getStudent().getStudentId() == id){
+				studentPaymentHistories.add(studentPayHistory);
+			}
+		}
 
 		// implemented to show the latest studentFee when generated.
 		for (Student student : studentRepository.findAll()) {
@@ -62,6 +71,7 @@ public class StudentFeeController {
 				for (StudentFee stdFee : srudentFees) {
 					if (stdFee.isActive()) {
 						System.out.println("=====stdFee=========" + stdFee.toString());
+						stdFee.setStudentPaymentHistories(studentPaymentHistories);
 						return new ResponseEntity<StudentFee>(stdFee, HttpStatus.OK);
 					}
 					// else{
@@ -104,13 +114,18 @@ public class StudentFeeController {
 			studentFee1.get().setEndDate(new Date());
 	
 			StudentPaymentHistory stuPayHist = new StudentPaymentHistory();
-			 stuPayHist.setStudent(payStudentFee.getStudentFee().getStudent());
-			 stuPayHist.setStudentFee(payStudentFee.getStudentFee());
+			stuPayHist.setStudent(payStudentFee.getStudentFee().getStudent());
+			stuPayHist.setStudentFee(payStudentFee.getStudentFee());
 			stuPayHist.setStartDate(new Date());
 			stuPayHist.setPayamentStatus("SUCCESS");
-			 stuPayHist.setStudentFeePaymentAmt(Integer.valueOf(payStudentFee.getPaymentAmount()));
-			 stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
+			stuPayHist.setStudentFeePaymentAmt(Integer.valueOf(payStudentFee.getPaymentAmount()));
+			stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
 			studentFeePaymentRepository.save(stuPayHist);
+			
+			List<StudentPaymentHistory> oldStudentPaymentHistories =  payStudentFee.getStudentFee().getStudentPaymentHistories();
+			oldStudentPaymentHistories.add(stuPayHist);
+			studentFee1.get().setStudentPaymentHistories(oldStudentPaymentHistories);
+			
 			//studentPaymentHistories.add(stuPayHist);
 			//studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
 	//		
