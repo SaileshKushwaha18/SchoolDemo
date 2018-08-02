@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.PayStudentFee;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentPaymentHistory;
@@ -75,57 +76,56 @@ public class StudentFeeController {
 		return new ResponseEntity<StudentFee>(new StudentFee(), HttpStatus.OK);
 	}
 
+	
 	@RequestMapping(value = "/studentfees/{id}/payment", method = RequestMethod.POST)
-	public ResponseEntity<StudentFee> updatePayment(@PathVariable Long id, @RequestBody StudentFee studentFee) {
-
-		Integer remainingBalance = 0;
-		Integer totalPaid = 0;
-//		List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
-//
-//		List<StudentPaymentHistory> studentPaymentHistories1 = (List<StudentPaymentHistory>) studentFeePaymentRepository.findAll();
-				
-		Optional<StudentFee> studentFee1 = studentFeeRepository.findById(id);
+	public ResponseEntity<StudentFee>  updatePayment(@RequestBody PayStudentFee payStudentFee){
 		
-		if (studentFee1 != null && studentFee1.get() != null && studentFee1.get().getStudentPaidFeeAmt() != null) {
-			totalPaid = Integer.valueOf(studentFee1.get().getStudentPaidFeeAmt()) + Integer.valueOf(studentFee.getStudentPaidFeeAmt());
-		} else {
-			totalPaid = studentFee.getStudentPaidFeeAmt();
-		}
-		
-
-		if (studentFee1 != null && studentFee1.get() != null && studentFee1.get().getStudentBalanceFeeAmt() == null) {
-			remainingBalance = Integer.valueOf(studentFee.getStudentFeeAmt())
-					- Integer.valueOf(studentFee.getStudentPaidFeeAmt());
-		} else {
-			remainingBalance = Integer.valueOf(studentFee1.get().getStudentBalanceFeeAmt())
-					- Integer.valueOf(studentFee.getStudentPaidFeeAmt());
-		}
-
-		studentFee1.get().setStudentPaidFeeAmt(totalPaid);
-		studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
-		studentFee1.get().setActive(studentFee.isActive());
-		studentFee1.get().setEndDate(new Date());
-
-		StudentPaymentHistory stuPayHist = new StudentPaymentHistory();
-		stuPayHist.setStudent(studentFee.getStudent());
-		stuPayHist.setStudentFee(studentFee);
-		stuPayHist.setStartDate(new Date());
-		stuPayHist.setPayamentStatus("SUCCESS");
-		stuPayHist.setStudentFeePaymentAmt(studentFee.getStudentPaidFeeAmt());
-		//stuPayHist.setStudentFeePaymentCmt(studentFee.getS);
-		studentFeePaymentRepository.save(stuPayHist);
-		//studentPaymentHistories.add(stuPayHist);
-		//studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
-//		
-//		for(StudentPaymentHistory studentPayHistory : studentPaymentHistories1){
-//			if(studentPayHistory.getStudent().getStudentId() == studentFee.getStudentFeeId()){
-//				studentPaymentHistories.add(studentPayHistory);
-//			}
-//		}
-//		
-//		studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
-		
-		return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
+		 if(payStudentFee !=null && payStudentFee.getStudentFee() !=null ){
+			 Integer remainingBalance= Integer.valueOf(payStudentFee.getStudentFee().getStudentBalanceFeeAmt());
+			 Integer PaidAmount = (null == payStudentFee.getStudentFee().getStudentPaidFeeAmt()) ? 0 : Integer.valueOf(payStudentFee.getStudentFee().getStudentPaidFeeAmt());
+					
+			
+			 boolean feeActiveFlag = payStudentFee.getStudentFee().isActive();
+			 
+			 PaidAmount = PaidAmount + Integer.valueOf(payStudentFee.getPaymentAmount());
+			 remainingBalance  = remainingBalance - Integer.valueOf(payStudentFee.getPaymentAmount());
+			
+			 List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
+			 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(payStudentFee.getStudentFee().getStudentFeeId());
+	
+			 if(PaidAmount == Integer.valueOf(payStudentFee.getStudentFee().getStudentFeeAmt())){
+				 feeActiveFlag = false;
+			}
+	
+			 
+			 studentFee1.get().setStudentPaidFeeAmt(PaidAmount);
+			studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
+			 studentFee1.get().setActive(feeActiveFlag);
+			studentFee1.get().setEndDate(new Date());
+	
+			StudentPaymentHistory stuPayHist = new StudentPaymentHistory();
+			 stuPayHist.setStudent(payStudentFee.getStudentFee().getStudent());
+			 stuPayHist.setStudentFee(payStudentFee.getStudentFee());
+			stuPayHist.setStartDate(new Date());
+			stuPayHist.setPayamentStatus("SUCCESS");
+			 stuPayHist.setStudentFeePaymentAmt(Integer.valueOf(payStudentFee.getPaymentAmount()));
+			 stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
+			studentFeePaymentRepository.save(stuPayHist);
+			//studentPaymentHistories.add(stuPayHist);
+			//studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
+	//		
+	//		for(StudentPaymentHistory studentPayHistory : studentPaymentHistories1){
+	//			if(studentPayHistory.getStudent().getStudentId() == studentFee.getStudentFeeId()){
+	//				studentPaymentHistories.add(studentPayHistory);
+	//			}
+	//		}
+	//		
+	//		studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
+			
+			return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
+		 }else{
+			 return new ResponseEntity<StudentFee>(HttpStatus.OK);
+		 }
 	}
 
 	@RequestMapping(value = "/studentfees/{id}/payment", method = RequestMethod.GET)
