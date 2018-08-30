@@ -25,30 +25,46 @@ public class StudentFeeWaiver  implements Serializable{
 	private Long studentFeeWaiverId;
 	
 	@OneToOne
-	@JoinColumn(name="FEE_TYPE_ID")
-	private ClassFeeType classFeeType;
-	
-	@OneToOne
 	@JoinColumn(name="STUDENT_ID")
 	private Student student;
 	
-	@Column(name="FEE_WAIVER_PERC")
-	private String feeWaiverPer;
+	@Column(name="FEE_WAIVER_TYPE")
+	private String feeWaiverType;
 
+	@Column(name="FEE_WAIVER_AMT")
+	private Integer feeWaiverAmt;
+	
+
+	@Column(name="FEE_WAIVER_CMT")
+	private String feeWaiverCmt;
+	
+	@Column(name="ACTIVE_FLG")
+	private boolean active;
+	
 	public Long getStudentFeeWaiverId() {
 		return studentFeeWaiverId;
 	}
 
+	
 	public void setStudentFeeWaiverId(Long studentFeeWaiverId) {
 		this.studentFeeWaiverId = studentFeeWaiverId;
 	}
 
-	public ClassFeeType getClassFeeType() {
-		return classFeeType;
+	
+	public String getFeeWaiverType() {
+		return feeWaiverType;
 	}
 
-	public void setClassFeeType(ClassFeeType classFeeType) {
-		this.classFeeType = classFeeType;
+	public void setFeeWaiverType(String feeWaiverType) {
+		this.feeWaiverType = feeWaiverType;
+	}
+
+	public Integer getFeeWaiverAmt() {
+		return feeWaiverAmt;
+	}
+
+	public void setFeeWaiverAmt(Integer feeWaiverAmt) {
+		this.feeWaiverAmt = feeWaiverAmt;
 	}
 
 	public Student getStudent() {
@@ -59,31 +75,57 @@ public class StudentFeeWaiver  implements Serializable{
 		this.student = student;
 	}
 
-	public String getFeeWaiverPer() {
-		return feeWaiverPer;
+	
+	public String getFeeWaiverCmt() {
+		return feeWaiverCmt;
 	}
 
-	public void setFeeWaiverPer(String feeWaiverPer) {
-		this.feeWaiverPer = feeWaiverPer;
+
+	public void setFeeWaiverCmt(String feeWaiverCmt) {
+		this.feeWaiverCmt = feeWaiverCmt;
 	}
 
-	public StudentFeeWaiver(Long studentFeeWaiverId, ClassFeeType classFeeType, Student student, String feeWaiverPer) {
-		super();
-		this.studentFeeWaiverId = studentFeeWaiverId;
-		this.classFeeType = classFeeType;
-		this.student = student;
-		this.feeWaiverPer = feeWaiverPer;
+
+	public boolean isActive() {
+		return active;
 	}
+
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 
 	public StudentFeeWaiver() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "StudentFeeWaiver [studentFeeWaiverId=" + studentFeeWaiverId + ", classFeeType=" + classFeeType
-				+ ", student=" + student + ", feeWaiverPer=" + feeWaiverPer + "]";
+	public StudentFeeWaiver(Long studentFeeWaiverId, Student student, String feeWaiverType, Integer feeWaiverAmt) {
+		super();
+		this.studentFeeWaiverId = studentFeeWaiverId;
+		this.student = student;
+		this.feeWaiverType = feeWaiverType;
+		this.feeWaiverAmt = feeWaiverAmt;
 	}
+
+	public StudentFeeWaiver(Long studentFeeWaiverId, Student student, String feeWaiverType, Integer feeWaiverAmt,
+			String feeWaiverCmt, boolean active) {
+		super();
+		this.studentFeeWaiverId = studentFeeWaiverId;
+		this.student = student;
+		this.feeWaiverType = feeWaiverType;
+		this.feeWaiverAmt = feeWaiverAmt;
+		this.feeWaiverCmt = feeWaiverCmt;
+		this.active = active;
+	}
+
+//
+//	@Override
+//	public String toString() {
+//		return "StudentFeeWaiver [studentFeeWaiverId=" + studentFeeWaiverId + ", feeWaiverType=" + feeWaiverType
+//				+ ", feeWaiverAmt=" + feeWaiverAmt + "]";
+//	}
+
 	
 }

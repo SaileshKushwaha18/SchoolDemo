@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +26,7 @@ import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
 import com.example.demo.repository.StudentFeeParamsRepository;
 import com.example.demo.repository.StudentFeeRepository;
+import com.example.demo.repository.StudentFeeWaiverRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -39,6 +39,9 @@ public class ClassFeeController {
 	
 	@Autowired
 	private StudentFeeParamsRepository studentFeeParamsRepository;
+	
+	@Autowired
+	private StudentFeeWaiverRepository studentFeeWaiverRepository;
 	
 	@Autowired
 	private ClassFeeParamsRepository classFeeParamsRepository;
@@ -98,7 +101,8 @@ public class ClassFeeController {
 	public ResponseEntity<GenerateFee>  generateStudentFee(@RequestBody GenerateFee generateFee) {
 
 		List<StudentFee> studentFees = new ArrayList<>();
-		List<StudentFeeParams> studentFeeParams = new ArrayList<>();
+		
+		List<StudentFeeParams> studentFeeParamsClass = new ArrayList<>();
 		
 		// Copying ClassFee Params to StudentFee Params.
 		ClassFee classFee = generateFee.getClassFee();
@@ -110,9 +114,11 @@ public class ClassFeeController {
 			studentFeeParams1.setClassFee(classFee);
 			
 			//System.out.println("============studentFeeParams1=================" + studentFeeParams1.toString());
-			studentFeeParams.add(studentFeeParams1);
+			studentFeeParamsClass.add(studentFeeParams1);
 			
 		}
+		
+		//System.out.println("========studentFeeParamsClass========="+studentFeeParamsClass.toString());
 		
 		//adding the copied studentFeeParams to StudentFee
 		// calculating StudentFeeAmt based on the studentFeeParams total value.
@@ -120,13 +126,32 @@ public class ClassFeeController {
 		
 		for(StudentClass studentClass : studentClasses){
 			List<Student> students = studentClass.getStudents();
-			Integer studentTotalAmt =0 ;
+			
+			//System.out.println("=======students ============"+students.toString());
 			for(Student student : students){
+				List<StudentFeeParams> studentFeeParams = new ArrayList<>();
+				//System.out.println("=======Student ID ============"+student.getStudentId());
 				StudentFee studentFee = new StudentFee();
 				studentFee.setClassFee(classFee);
 				studentFee.setStudent(student);
 				studentFee.setStartDate(new Date());
 				studentFee.setEndDate(null);
+				
+				//System.out.println("========Student.isnew========="+student.isNew());
+				
+				if(!student.isNew()){
+					for(StudentFeeParams studFeeParams : studentFeeParamsClass){
+						if(studFeeParams.getParamType().equalsIgnoreCase("M")){
+							studentFeeParams.add(studFeeParams);
+						}						
+					}
+					//System.out.println("============>>>>>>>>>>>>>>>>>>>>>>> NOT IS NEW ================= "+ student.isNew());
+				}else{
+					//System.out.println("============>>>>>>>>>>>>>>>>>>>>>>> IS NEW ================= "+ student.isNew());
+					studentFeeParams.addAll(studentFeeParamsClass);
+				}
+
+				//System.out.println("========studentFeeParamsTest1========="+studentFeeParams.toString());
 				
 				//adding student previous Fees / dues to student params.
 				List<StudentFee> studentsFees = (List<StudentFee>) studentFeeRepository.findAll();
@@ -145,15 +170,34 @@ public class ClassFeeController {
 					}
 				}
 				
+//
+//				List<StudentFeeWaiver> studentFeeWaivers = (List<StudentFeeWaiver>) studentFeeWaiverRepository.findAll();
+//				//getting student Fee Waivers.
+//				for(StudentFeeWaiver studentFeeWaiver : studentFeeWaivers){
+//					if(studentFeeWaiver !=null && studentFeeWaiver.isActive() && studentFeeWaiver.getStudent().getStudentId() == student.getStudentId()){
+//						System.out.println("===studentFeeWaiver====="+studentFeeWaiver.toString());
+//						// TODO feewaivers will be added subtracted when we work on Waiver part.0
+//						
+//						StudentFeeParams studentFeeParams3 = new StudentFeeParams();
+//						studentFeeParams3.setName(studentFeeWaiver.getFeeWaiverType());
+//						studentFeeParams3.setValue(studentFeeWaiver.getFeeWaiverAmt() == null ? "" : studentFeeWaiver.getFeeWaiverAmt().toString());
+//						studentFeeParams3.setParamType("M");
+//						studentFeeParams3.setClassFee(classFee);
+//						studentFeeParams.add(studentFeeParams3);
+//						//stdFee.setActive(false);
+//						//studentFeeRepository.save(stdFee);
+//					}else{
+//						System.out.println("===studentFeeWaiver null=============== ");
+//						// TODO feewaivers will be added subtracted when we work on Waiver part.
+//					}
+//					
+//				}
+				
+				//System.out.println("========studentFeeParamsTest2========="+studentFeeParams.toString());
 				studentFee.setStudentFeeParams(studentFeeParams);
 				studentFee.setStudentClass(studentClass);
 				
-				//getting student Fee Waivers.
-				for(StudentFeeWaiver studentFeeWaiver : student.getStudenFeeWaivers()){
-					System.out.println("===studentFeeWaiver====="+studentFeeWaiver.toString());
-					// TODO feewaivers will be added subtracted when we work on Waiver part.
-				}
-				
+				Integer studentTotalAmt =0 ;
 				//setting StudentFeeAmount.
 				for(StudentFeeParams studentFeeParam : studentFeeParams){
 					if(!studentFeeParam.getValue().isEmpty()){
@@ -166,12 +210,12 @@ public class ClassFeeController {
 				
 				studentFees.add(studentFee);
 			}
+			//System.out.println("===========generateStudentFee============="+studentClasses.toString());
 			
+			//studentFeeParamsRepository.saveAll(studentFeeParams);
+			studentFeeRepository.saveAll(studentFees);
 		}
-		//System.out.println("===========generateStudentFee============="+studentClasses.toString());
-		
-		studentFeeParamsRepository.saveAll(studentFeeParams);
-		studentFeeRepository.saveAll(studentFees);
+
 
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}

@@ -13,11 +13,11 @@ public class PayStudentFee  implements Serializable{
 	private String paymentComments;
 	
 	
-	@Override
-	public String toString() {
-		return "PayStudentFee [studentFee=" + studentFee + ", paymentAmount=" + paymentAmount + ", paymentComments="
-				+ paymentComments + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "PayStudentFee [studentFee=" + studentFee + ", paymentAmount=" + paymentAmount + ", paymentComments="
+//				+ paymentComments + "]";
+//	}
 	
 	public StudentFee getStudentFee() {
 		return studentFee;

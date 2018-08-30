@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +20,7 @@ import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentPaymentHistory;
 import com.example.demo.repository.StudentFeePaymentRepository;
 import com.example.demo.repository.StudentFeeRepository;
+import com.example.demo.repository.StudentFeeWaiverRepository;
 import com.example.demo.repository.StudentRepository;
 
 @RestController
@@ -35,6 +35,9 @@ public class StudentFeeController {
 	@Autowired
 	StudentFeePaymentRepository studentFeePaymentRepository;
 
+	@Autowired
+	StudentFeeWaiverRepository studentFeeWaiverRepository;
+	
 	@RequestMapping(value = "/studentfees", method = RequestMethod.GET)
 	public List<StudentFee> getStudentFees() {
 		return (List<StudentFee>) studentFeeRepository.findAll();
@@ -53,9 +56,11 @@ public class StudentFeeController {
 	@RequestMapping(value = "/studentfees/{id}", method = RequestMethod.GET)
 	public ResponseEntity<StudentFee> getStudentFeesByStudentId1(@PathVariable Long id) {
 		System.out.println("=============getStudentFeesByStudentId1===============" + id);
-		
+
 		List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
 		List<StudentPaymentHistory> studentPaymentHistories1 = (List<StudentPaymentHistory>) studentFeePaymentRepository.findAll();
+		
+		
 		
 		for(StudentPaymentHistory studentPayHistory : studentPaymentHistories1){
 			if(studentPayHistory.getStudent().getStudentId() == id){
@@ -63,9 +68,14 @@ public class StudentFeeController {
 			}
 		}
 
+		
 		// implemented to show the latest studentFee when generated.
 		for (Student student : studentRepository.findAll()) {
 			if (student.getStudentId().equals(id)) {
+//				if(studentFeeWaiverRepository.findByStudent(student) !=null) {
+//					student.setStudentFeeWaivers(studentFeeWaiverRepository.findByStudent(student));
+//				}
+				
 				List<StudentFee> srudentFees = studentFeeRepository.findByStudent(student);
 				System.out.println("=====srudentFees=========" + srudentFees.toString());
 				for (StudentFee stdFee : srudentFees) {
@@ -100,7 +110,7 @@ public class StudentFeeController {
 			 PaidAmount = PaidAmount + Integer.valueOf(payStudentFee.getPaymentAmount());
 			 remainingBalance  = remainingBalance - Integer.valueOf(payStudentFee.getPaymentAmount());
 			
-			 List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
+			// List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
 			 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(payStudentFee.getStudentFee().getStudentFeeId());
 	
 			 if(PaidAmount == Integer.valueOf(payStudentFee.getStudentFee().getStudentFeeAmt())){
@@ -108,18 +118,19 @@ public class StudentFeeController {
 			}
 	
 			 
-			 studentFee1.get().setStudentPaidFeeAmt(PaidAmount);
+			studentFee1.get().setStudentPaidFeeAmt(PaidAmount);
 			studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
-			 studentFee1.get().setActive(feeActiveFlag);
+			studentFee1.get().setActive(feeActiveFlag);
 			studentFee1.get().setEndDate(new Date());
-	
+			studentFee1.get().getStudent().setNew(false);
+			
 			StudentPaymentHistory stuPayHist = new StudentPaymentHistory();
-			stuPayHist.setStudent(payStudentFee.getStudentFee().getStudent());
-			stuPayHist.setStudentFee(payStudentFee.getStudentFee());
+			 stuPayHist.setStudent(payStudentFee.getStudentFee().getStudent());
+			 stuPayHist.setStudentFee(payStudentFee.getStudentFee());
 			stuPayHist.setStartDate(new Date());
 			stuPayHist.setPayamentStatus("SUCCESS");
-			stuPayHist.setStudentFeePaymentAmt(Integer.valueOf(payStudentFee.getPaymentAmount()));
-			stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
+			 stuPayHist.setStudentFeePaymentAmt(Integer.valueOf(payStudentFee.getPaymentAmount()));
+			 stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
 			studentFeePaymentRepository.save(stuPayHist);
 			
 			List<StudentPaymentHistory> oldStudentPaymentHistories =  payStudentFee.getStudentFee().getStudentPaymentHistories();

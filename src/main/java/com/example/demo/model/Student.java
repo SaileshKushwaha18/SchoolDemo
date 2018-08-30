@@ -7,18 +7,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -111,8 +109,14 @@ public class Student implements Serializable{
     inverseJoinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")})
 	private StudentClass studentClass;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL,CascadeType.PERSIST,CascadeType.MERGE }, mappedBy = "student")
-	private List<StudentFeeWaiver> studenFeeWaivers;
+	@Transient
+	private List<StudentFeeWaiver> studentFeeWaivers;
+	
+	@Column(name="ACTIVE_FLG")
+	private boolean active =true;
+	
+	@Column(name="NEW_FLG")
+	private boolean isNew =true;
 	
 	public Long getStudentId() {
 		return studentId;
@@ -298,12 +302,12 @@ public class Student implements Serializable{
 		this.emailaddress = emailaddress;
 	}
 
-	public List<StudentFeeWaiver> getStudenFeeWaivers() {
-		return studenFeeWaivers;
+	public List<StudentFeeWaiver> getStudentFeeWaivers() {
+		return studentFeeWaivers;
 	}
 
-	public void setStudenFeeWaivers(List<StudentFeeWaiver> studenFeeWaivers) {
-		this.studenFeeWaivers = studenFeeWaivers;
+	public void setStudentFeeWaivers(List<StudentFeeWaiver> studentFeeWaivers) {
+		this.studentFeeWaivers = studentFeeWaivers;
 	}
 
 	public static long getSerialversionuid() {
@@ -320,6 +324,22 @@ public class Student implements Serializable{
 	}
 
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+
 	public Student() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -329,7 +349,7 @@ public class Student implements Serializable{
 			Date studentdob, String gender, Date startDate, Date endDate, String fathername, Integer fatherage,
 			String fatherqualification, Date fatherdob, String fatherprofession, String mothername, Integer motherage,
 			String motherqualification, Date motherdob, String motherprofession, String address, String phoneno,
-			String cellno, String emailaddress, StudentClass studentClass, List<StudentFeeWaiver> studenFeeWaivers) {
+			String cellno, String emailaddress, StudentClass studentClass, List<StudentFeeWaiver> studentFeeWaivers) {
 		super();
 		this.studentId = studentId;
 		this.admissionno = admissionno;
@@ -355,20 +375,20 @@ public class Student implements Serializable{
 		this.cellno = cellno;
 		this.emailaddress = emailaddress;
 		this.studentClass = studentClass;
-		this.studenFeeWaivers = studenFeeWaivers;
+		this.studentFeeWaivers = studentFeeWaivers;
 	}
 
-	@Override
-	public String toString() {
-		return "Student [studentId=" + studentId + ", admissionno=" + admissionno + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", studentAdharId=" + studentAdharId + ", studentdob=" + studentdob
-				+ ", gender=" + gender + ", startDate=" + startDate + ", endDate=" + endDate + ", fathername="
-				+ fathername + ", fatherage=" + fatherage + ", fatherqualification=" + fatherqualification
-				+ ", fatherdob=" + fatherdob + ", fatherprofession=" + fatherprofession + ", mothername=" + mothername
-				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
-				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno
-				+ ", cellno=" + cellno + ", emailaddress=" + emailaddress + ", studentClass=" + studentClass
-				+ ", studenFeeWaivers=" + studenFeeWaivers + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Student [studentId=" + studentId + ", admissionno=" + admissionno + ", firstName=" + firstName
+//				+ ", lastName=" + lastName + ", studentAdharId=" + studentAdharId + ", studentdob=" + studentdob
+//				+ ", gender=" + gender + ", startDate=" + startDate + ", endDate=" + endDate + ", fathername="
+//				+ fathername + ", fatherage=" + fatherage + ", fatherqualification=" + fatherqualification
+//				+ ", fatherdob=" + fatherdob + ", fatherprofession=" + fatherprofession + ", mothername=" + mothername
+//				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
+//				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno
+//				+ ", cellno=" + cellno + ", emailaddress=" + emailaddress + ", studentClass=" + studentClass
+//				+ ", studentFeeWaivers=" + studentFeeWaivers + "]";
+//	}
 		
 }

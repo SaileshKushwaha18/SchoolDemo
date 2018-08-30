@@ -209,14 +209,14 @@ public class StudentFee implements Serializable{
 		this.studentFeeParams = studentFeeParams;
 	}
 
-	@Override
-	public String toString() {
-		return "StudentFee [studentFeeId=" + studentFeeId 
-				+ ", isActive=" + isActive + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", studentFeeAmt=" + studentFeeAmt + ", studentPaidFeeAmt="
-				+ studentPaidFeeAmt + ", studentBalanceFeeAmt=" + studentBalanceFeeAmt + ", studentFeeParams="
-				+ studentFeeParams + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "StudentFee [studentFeeId=" + studentFeeId 
+//				+ ", isActive=" + isActive + ", startDate=" + startDate
+//				+ ", endDate=" + endDate + ", studentFeeAmt=" + studentFeeAmt + ", studentPaidFeeAmt="
+//				+ studentPaidFeeAmt + ", studentBalanceFeeAmt=" + studentBalanceFeeAmt + ", studentFeeParams="
+//				+ studentFeeParams + "]";
+//	}
 
 
 	public StudentFee(Long studentFeeId, ClassFee classFee, Student student, StudentClass studentClass,

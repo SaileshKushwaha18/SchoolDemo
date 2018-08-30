@@ -7,10 +7,11 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Student;
-import com.example.demo.model.StudentFee;
+import com.example.demo.model.StudentFeeWaiver;
 
 @Repository
 @RepositoryRestController
-public interface StudentFeeRepository extends CrudRepository<StudentFee, Long> {
-	List<StudentFee> findByStudent(Student id);
+public interface StudentFeeWaiverRepository extends CrudRepository<StudentFeeWaiver, Long> {
+	
+	List<StudentFeeWaiver> findByStudent(Student student);
 }
