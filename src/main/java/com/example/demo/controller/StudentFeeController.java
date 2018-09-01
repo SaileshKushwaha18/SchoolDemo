@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.PayStudentFee;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentFee;
+import com.example.demo.model.StudentFeeParams;
+import com.example.demo.model.StudentFine;
 import com.example.demo.model.StudentPaymentHistory;
 import com.example.demo.repository.StudentFeePaymentRepository;
 import com.example.demo.repository.StudentFeeRepository;
@@ -147,6 +149,40 @@ public class StudentFeeController {
 	//		}
 	//		
 	//		studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
+			
+			return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
+		 }else{
+			 return new ResponseEntity<StudentFee>(HttpStatus.OK);
+		 }
+	}
+	
+	@RequestMapping(value = "/studentfees/{id}/addfine", method = RequestMethod.POST)
+	public ResponseEntity<StudentFee>  addStudentFine(@RequestBody StudentFine studentFine){
+		
+		 if(studentFine !=null && studentFine.getStudentFee() !=null ){
+			 Integer remainingBalance= Integer.valueOf(studentFine.getStudentFee().getStudentBalanceFeeAmt());
+			 Integer totalFeeAmount = 	Integer.valueOf(studentFine.getStudentFee().getStudentFeeAmt());	
+			 List<StudentFeeParams> studentFeeParams = new ArrayList<>();
+			
+			 remainingBalance  = remainingBalance + Integer.valueOf(studentFine.getFineAmount());
+			 totalFeeAmount = totalFeeAmount + Integer.valueOf(studentFine.getFineAmount());
+			
+			 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(studentFine.getStudentFee().getStudentFeeId());
+			 studentFeeParams.addAll(studentFee1.get().getStudentFeeParams());
+	
+			
+			StudentFeeParams studentFeeParams2 = new StudentFeeParams();
+			studentFeeParams2.setName(studentFine.getFineComments());
+			studentFeeParams2.setValue(studentFine.getFineAmount() == null ? "" : studentFine.getFineAmount().toString());
+			studentFeeParams2.setParamType("M");
+			studentFeeParams2.setClassFee(studentFee1.get().getClassFee());
+			studentFeeParams.add(studentFeeParams2);
+			
+			studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
+			studentFee1.get().setStudentFeeAmt(totalFeeAmount);
+			studentFee1.get().getStudent().setNew(false);
+			studentFee1.get().setStudentFeeParams(studentFeeParams);
+			
 			
 			return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
 		 }else{
