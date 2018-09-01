@@ -21,12 +21,10 @@ import com.example.demo.model.Student;
 import com.example.demo.model.StudentClass;
 import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentFeeParams;
-import com.example.demo.model.StudentFeeWaiver;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
-import com.example.demo.repository.StudentFeeParamsRepository;
 import com.example.demo.repository.StudentFeeRepository;
-import com.example.demo.repository.StudentFeeWaiverRepository;
+import com.example.demo.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -38,10 +36,10 @@ public class ClassFeeController {
 	private StudentFeeRepository studentFeeRepository;
 	
 	@Autowired
-	private StudentFeeParamsRepository studentFeeParamsRepository;
+	private StudentRepository studentRepository;
 	
-	@Autowired
-	private StudentFeeWaiverRepository studentFeeWaiverRepository;
+//	@Autowired
+//	private StudentFeeWaiverRepository studentFeeWaiverRepository;
 	
 	@Autowired
 	private ClassFeeParamsRepository classFeeParamsRepository;
@@ -149,6 +147,9 @@ public class ClassFeeController {
 				}else{
 					//System.out.println("============>>>>>>>>>>>>>>>>>>>>>>> IS NEW ================= "+ student.isNew());
 					studentFeeParams.addAll(studentFeeParamsClass);
+					
+					//student.setNew(false);
+					
 				}
 
 				//System.out.println("========studentFeeParamsTest1========="+studentFeeParams.toString());
@@ -209,14 +210,23 @@ public class ClassFeeController {
 				studentFee.setStudentBalanceFeeAmt(studentTotalAmt);
 				
 				studentFees.add(studentFee);
+				
 			}
 			//System.out.println("===========generateStudentFee============="+studentClasses.toString());
 			
 			//studentFeeParamsRepository.saveAll(studentFeeParams);
 			studentFeeRepository.saveAll(studentFees);
+			
 		}
-
-
+		
+		List<Student> allStudents = (List<Student>) studentRepository.findAll();
+		List<Student> allstudentsUpdated = new ArrayList<>();
+		for(Student allStudent : allStudents){
+			allStudent.setNew(false);
+			allstudentsUpdated.add(allStudent);
+		}
+		studentRepository.saveAll(allstudentsUpdated);
+		
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
 }
