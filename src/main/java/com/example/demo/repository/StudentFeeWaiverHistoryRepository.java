@@ -4,10 +4,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.StudentFeeWaiver;
+import com.example.demo.model.StudentFeeWaiverHistory;
 
 @Repository
 @RepositoryRestController
-public interface StudentFeeWaiverRepository extends CrudRepository<StudentFeeWaiver, Long> {
+public interface StudentFeeWaiverHistoryRepository extends CrudRepository<StudentFeeWaiverHistory, Long> {
 	
 }

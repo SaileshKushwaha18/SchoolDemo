@@ -5,7 +5,6 @@ package com.example.demo.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -108,9 +106,6 @@ public class Student implements Serializable{
     joinColumns={@JoinColumn(name="STUDENT_ID", referencedColumnName="STUDENT_ID")},
     inverseJoinColumns={@JoinColumn(name="STUDENT_CLASS_ID", referencedColumnName="STUDENT_CLASS_ID")})
 	private StudentClass studentClass;
-	
-	@Transient
-	private List<StudentFeeWaiver> studentFeeWaivers;
 	
 	@Column(name="ACTIVE_FLG")
 	private boolean active =true;
@@ -302,14 +297,6 @@ public class Student implements Serializable{
 		this.emailaddress = emailaddress;
 	}
 
-	public List<StudentFeeWaiver> getStudentFeeWaivers() {
-		return studentFeeWaivers;
-	}
-
-	public void setStudentFeeWaivers(List<StudentFeeWaiver> studentFeeWaivers) {
-		this.studentFeeWaivers = studentFeeWaivers;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -349,7 +336,7 @@ public class Student implements Serializable{
 			Date studentdob, String gender, Date startDate, Date endDate, String fathername, Integer fatherage,
 			String fatherqualification, Date fatherdob, String fatherprofession, String mothername, Integer motherage,
 			String motherqualification, Date motherdob, String motherprofession, String address, String phoneno,
-			String cellno, String emailaddress, StudentClass studentClass, List<StudentFeeWaiver> studentFeeWaivers) {
+			String cellno, String emailaddress, StudentClass studentClass) {
 		super();
 		this.studentId = studentId;
 		this.admissionno = admissionno;
@@ -375,7 +362,6 @@ public class Student implements Serializable{
 		this.cellno = cellno;
 		this.emailaddress = emailaddress;
 		this.studentClass = studentClass;
-		this.studentFeeWaivers = studentFeeWaivers;
 	}
 
 //	@Override
@@ -386,9 +372,7 @@ public class Student implements Serializable{
 //				+ fathername + ", fatherage=" + fatherage + ", fatherqualification=" + fatherqualification
 //				+ ", fatherdob=" + fatherdob + ", fatherprofession=" + fatherprofession + ", mothername=" + mothername
 //				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
-//				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno
-//				+ ", cellno=" + cellno + ", emailaddress=" + emailaddress + ", studentClass=" + studentClass
-//				+ ", studentFeeWaivers=" + studentFeeWaivers + "]";
+//				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno + "]";
 //	}
 		
 }

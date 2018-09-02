@@ -62,6 +62,8 @@ public class StudentFee implements Serializable{
 	@Column(name="STUDENT_BALANCE_FEE_AMT")
 	private Integer studentBalanceFeeAmt;
 	
+	@Column(name="STUDENT_WAIVER_FEE_AMT")
+	private Integer studentWaiverFeeAmt;
 	
 	//@JsonProperty(access = Access.READ_ONLY)
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -73,6 +75,10 @@ public class StudentFee implements Serializable{
 	@Transient
     @JsonIgnoreProperties("studentFee")
 	private List<StudentPaymentHistory> studentPaymentHistories;
+
+	@Transient
+    @JsonIgnoreProperties("studentFeeWaiver")
+	private List<StudentFeeWaiverHistory> studentFeeWaiverHistories;
 	
 	public Long getStudentFeeId() {
 		return studentFeeId;
@@ -162,6 +168,14 @@ public class StudentFee implements Serializable{
 		return studentBalanceFeeAmt;
 	}
 
+	public Integer getStudentWaiverFeeAmt() {
+		return studentWaiverFeeAmt;
+	}
+
+	public void setStudentWaiverFeeAmt(Integer studentWaiverFeeAmt) {
+		this.studentWaiverFeeAmt = studentWaiverFeeAmt;
+	}
+
 	public void setStudentBalanceFeeAmt(Integer studentBalanceFeeAmt) {
 		this.studentBalanceFeeAmt = studentBalanceFeeAmt;
 	}
@@ -173,6 +187,15 @@ public class StudentFee implements Serializable{
 
 	public void setStudentPaymentHistories(List<StudentPaymentHistory> studentPaymentHistories) {
 		this.studentPaymentHistories = studentPaymentHistories;
+	}
+
+	
+	public List<StudentFeeWaiverHistory> getStudentFeeWaiverHistories() {
+		return studentFeeWaiverHistories;
+	}
+
+	public void setStudentFeeWaiverHistories(List<StudentFeeWaiverHistory> studentFeeWaiverHistories) {
+		this.studentFeeWaiverHistories = studentFeeWaiverHistories;
 	}
 
 	public StudentFee() {

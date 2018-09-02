@@ -18,11 +18,13 @@ import com.example.demo.model.PayStudentFee;
 import com.example.demo.model.Student;
 import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentFeeParams;
+import com.example.demo.model.StudentFeeWaiverHistory;
 import com.example.demo.model.StudentFine;
 import com.example.demo.model.StudentPaymentHistory;
+import com.example.demo.model.StudentWaiver;
 import com.example.demo.repository.StudentFeePaymentRepository;
 import com.example.demo.repository.StudentFeeRepository;
-import com.example.demo.repository.StudentFeeWaiverRepository;
+import com.example.demo.repository.StudentFeeWaiverHistoryRepository;
 import com.example.demo.repository.StudentRepository;
 
 @RestController
@@ -38,7 +40,7 @@ public class StudentFeeController {
 	StudentFeePaymentRepository studentFeePaymentRepository;
 
 	@Autowired
-	StudentFeeWaiverRepository studentFeeWaiverRepository;
+	StudentFeeWaiverHistoryRepository studentFeeWaiverHistoryRepository;
 	
 	@RequestMapping(value = "/studentfees", method = RequestMethod.GET)
 	public List<StudentFee> getStudentFees() {
@@ -135,10 +137,13 @@ public class StudentFeeController {
 			 stuPayHist.setStudentFeePaymentCmt(payStudentFee.getPaymentComments());
 			studentFeePaymentRepository.save(stuPayHist);
 			
-			List<StudentPaymentHistory> oldStudentPaymentHistories =  payStudentFee.getStudentFee().getStudentPaymentHistories();
+			List<StudentPaymentHistory> oldStudentPaymentHistories =   payStudentFee.getStudentFee().getStudentPaymentHistories();
+//			
+//			if(oldStudentPaymentHistories == null){
+//				oldStudentPaymentHistories =  studentFeePaymentRepository.findByStudentFee(payStudentFee.getStudentFee());
+//			}
 			oldStudentPaymentHistories.add(stuPayHist);
 			studentFee1.get().setStudentPaymentHistories(oldStudentPaymentHistories);
-			
 			//studentPaymentHistories.add(stuPayHist);
 			//studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
 	//		
@@ -190,6 +195,39 @@ public class StudentFeeController {
 		 }
 	}
 
+	@RequestMapping(value = "/studentfees/{id}/addwaiver", method = RequestMethod.POST)
+	public ResponseEntity<StudentWaiver>  addStudentWaiver(@RequestBody StudentWaiver studentWaiver){
+		
+		System.out.println("Inside add Fee Waiver Service " + studentWaiver);
+		
+		 if(studentWaiver !=null && studentWaiver.getStudentFee() !=null ){
+			 Integer remainingBalance= Integer.valueOf(studentWaiver.getStudentFee().getStudentBalanceFeeAmt());
+			 Integer waiverAmount= (null == studentWaiver.getStudentFee().getStudentWaiverFeeAmt() ) ? 0 : Integer.valueOf(studentWaiver.getStudentFee().getStudentBalanceFeeAmt());
+			 
+			 
+			 waiverAmount  = waiverAmount + Integer.valueOf(null == studentWaiver.getWaiverAmount() ? "0" : studentWaiver.getWaiverAmount());
+			 remainingBalance  = remainingBalance - Integer.valueOf(waiverAmount);
+			
+			// List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
+			 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(studentWaiver.getStudentFee().getStudentFeeId());
+			 studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
+			 studentFee1.get().setStudentWaiverFeeAmt(waiverAmount);
+			
+			StudentFeeWaiverHistory stuWaiverHist = new StudentFeeWaiverHistory();
+			stuWaiverHist.setStudentFee(studentWaiver.getStudentFee());
+			stuWaiverHist.setWaiverDate(new Date());
+			stuWaiverHist.setStudentFeeWaiverAmt(Integer.valueOf(studentWaiver.getWaiverAmount()));
+			stuWaiverHist.setStudentFeeWaiverCmt(studentWaiver.getWaiverComments());
+			studentFeeWaiverHistoryRepository.save(stuWaiverHist);
+			
+			studentFeeRepository.save (studentFee1.get());
+			
+			return new ResponseEntity<StudentWaiver>(studentWaiver, HttpStatus.OK);
+		 }else{
+			 return new ResponseEntity<StudentWaiver>(HttpStatus.OK);
+		 }
+	}
+	
 	@RequestMapping(value = "/studentfees/{id}/payment", method = RequestMethod.GET)
 	public ResponseEntity<StudentFee> getPayments(@PathVariable Long id) {
 
@@ -207,7 +245,27 @@ public class StudentFeeController {
 		
 		studentFee1.get().setStudentPaymentHistories(studentPaymentHistories);
 		
-		return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
+		return new ResponseEntity<StudentFee>(studentFee1.get(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/studentfees/{id}/waiver", method = RequestMethod.GET)
+	public ResponseEntity<StudentFee> getWaivers(@PathVariable Long id) {
+
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistories1 = new ArrayList<>();
+
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistories = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
+	
+		Optional<StudentFee> studentFee1 = studentFeeRepository.findById(id);
+		
+		for(StudentFeeWaiverHistory studentFeeWaiverHistory : studentFeeWaiverHistories){
+			if(studentFeeWaiverHistory.getStudentFee().getStudentFeeId() == studentFee1.get().getStudent().getStudentId()){
+				studentFeeWaiverHistories1.add(studentFeeWaiverHistory);
+			}
+		}
+		
+		studentFee1.get().setStudentFeeWaiverHistories(studentFeeWaiverHistories1);
+		
+		return new ResponseEntity<StudentFee>(studentFee1.get(), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/studentfees", method = RequestMethod.POST)
