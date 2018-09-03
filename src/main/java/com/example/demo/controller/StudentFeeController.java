@@ -71,7 +71,11 @@ public class StudentFeeController {
 				studentPaymentHistories.add(studentPayHistory);
 			}
 		}
-
+	
+		/* Rahul M: this code to add wavier history, casuing issue 
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistories = new ArrayList<>();
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistory1 = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
+		*/
 		
 		// implemented to show the latest studentFee when generated.
 		for (Student student : studentRepository.findAll()) {
@@ -86,6 +90,16 @@ public class StudentFeeController {
 					if (stdFee.isActive()) {
 						System.out.println("=====stdFee=========" + stdFee.toString());
 						stdFee.setStudentPaymentHistories(studentPaymentHistories);
+						
+						
+						/* Rahul M: this code to add wavier history, casuing issue 
+						for(StudentFeeWaiverHistory tmStudentFeeWaiverHistory : studentFeeWaiverHistory1){
+							if(tmStudentFeeWaiverHistory.getStudentFee().getStudentFeeId() == stdFee.getStudentFeeId()){
+								studentFeeWaiverHistories.add(tmStudentFeeWaiverHistory);
+							}
+						} 
+						stdFee.setStudentFeeWaiverHistories(studentFeeWaiverHistories);
+						*/
 						return new ResponseEntity<StudentFee>(stdFee, HttpStatus.OK);
 					}
 					// else{
@@ -196,35 +210,45 @@ public class StudentFeeController {
 	}
 
 	@RequestMapping(value = "/studentfees/{id}/addwaiver", method = RequestMethod.POST)
-	public ResponseEntity<StudentWaiver>  addStudentWaiver(@RequestBody StudentWaiver studentWaiver){
+	public ResponseEntity<StudentFee>  addStudentWaiver(@RequestBody StudentWaiver studentWaiver){
 		
 		System.out.println("Inside add Fee Waiver Service " + studentWaiver);
 		
 		 if(studentWaiver !=null && studentWaiver.getStudentFee() !=null ){
 			 Integer remainingBalance= Integer.valueOf(studentWaiver.getStudentFee().getStudentBalanceFeeAmt());
-			 Integer waiverAmount= (null == studentWaiver.getStudentFee().getStudentWaiverFeeAmt() ) ? 0 : Integer.valueOf(studentWaiver.getStudentFee().getStudentBalanceFeeAmt());
+			 Integer waiverAmount= (null == studentWaiver.getWaiverAmount()) ? 0 : Integer.valueOf(studentWaiver.getWaiverAmount());
+			 Integer totalWaiverAmount= (null == studentWaiver.getStudentFee().getStudentWaiverFeeAmt()) ? 0 : Integer.valueOf(studentWaiver.getStudentFee().getStudentWaiverFeeAmt());
 			 
-			 
-			 waiverAmount  = waiverAmount + Integer.valueOf(null == studentWaiver.getWaiverAmount() ? "0" : studentWaiver.getWaiverAmount());
+			 totalWaiverAmount = totalWaiverAmount + waiverAmount;
 			 remainingBalance  = remainingBalance - Integer.valueOf(waiverAmount);
-			
+			 
 			// List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
 			 Optional<StudentFee> studentFee1 = studentFeeRepository.findById(studentWaiver.getStudentFee().getStudentFeeId());
 			 studentFee1.get().setStudentBalanceFeeAmt(remainingBalance);
-			 studentFee1.get().setStudentWaiverFeeAmt(waiverAmount);
+			 studentFee1.get().setStudentWaiverFeeAmt(totalWaiverAmount);
 			
 			StudentFeeWaiverHistory stuWaiverHist = new StudentFeeWaiverHistory();
 			stuWaiverHist.setStudentFee(studentWaiver.getStudentFee());
 			stuWaiverHist.setWaiverDate(new Date());
-			stuWaiverHist.setStudentFeeWaiverAmt(Integer.valueOf(studentWaiver.getWaiverAmount()));
+			stuWaiverHist.setStudentFeeWaiverAmt(waiverAmount);
 			stuWaiverHist.setStudentFeeWaiverCmt(studentWaiver.getWaiverComments());
-			studentFeeWaiverHistoryRepository.save(stuWaiverHist);
+			studentFeeWaiverHistoryRepository.save(stuWaiverHist);  
 			
-			studentFeeRepository.save (studentFee1.get());
+			/* Rahul this code to add waiver history, causing issue
+			List<StudentFeeWaiverHistory> studentFeeWaiverHistories = new ArrayList<>();
+			List<StudentFeeWaiverHistory> studentFeeWaiverHistory1 = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
 			
-			return new ResponseEntity<StudentWaiver>(studentWaiver, HttpStatus.OK);
+			
+			for(StudentFeeWaiverHistory tmStudentFeeWaiverHistory : studentFeeWaiverHistory1){
+				if(tmStudentFeeWaiverHistory.getStudentFee().getStudentFeeId() == studentFee1.get().getStudentFeeId()){
+					studentFeeWaiverHistories.add(tmStudentFeeWaiverHistory);
+				}
+			} 
+			studentFee1.get().setStudentFeeWaiverHistories(studentFeeWaiverHistories);
+			*/
+			return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
 		 }else{
-			 return new ResponseEntity<StudentWaiver>(HttpStatus.OK);
+			 return new ResponseEntity<StudentFee>(HttpStatus.OK);
 		 }
 	}
 	
