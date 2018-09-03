@@ -44,7 +44,7 @@ public class AppUserController {
 		}
 		System.out.println(appUser.getEmail() + "============" + appUser.getPassword());
 		//return new ResponseEntity<AppUser>(appUser1,headers, HttpStatus.OK);
-		return new ResponseEntity<AppUser>(appUser,HttpStatus.OK);
+		return new ResponseEntity<AppUser>(appUser1,HttpStatus.OK);
 	}
 	
 	
