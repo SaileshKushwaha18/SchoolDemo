@@ -212,25 +212,23 @@ public class ClassFeeController {
 				studentFees.add(studentFee);
 				
 			}
-			//System.out.println("===========generateStudentFee============="+studentClasses.toString());
+			
+			
+			
+			
 			
 			//studentFeeParamsRepository.saveAll(studentFeeParams);
 			studentFeeRepository.saveAll(studentFees);
+			List<Student> allstudentsUpdated = new ArrayList<>();
 			
-		}
-		
-		List<Student> allstudentsUpdated = new ArrayList<>();
-		for(StudentClass studentClass : studentClasses)
-		{
-			List<Student> allStudents = studentClass.getStudents();
-			for(Student allStudent : allStudents){
-				Optional<Student> student= studentRepository.findById(allStudent.getStudentId());
-				student.get().setNew(false);
-				allstudentsUpdated.add(student.get());
+			//List<Student> allStudents = studentClass.getStudents();
+			List<Student> allStudents = studentRepository.findByStudentClass(studentClass);
+			for(Student student : allStudents){
+				student.setNew(false);
+				allstudentsUpdated.add(student);
 			}
+			studentRepository.saveAll(allstudentsUpdated);
 		}
-		
-		studentRepository.saveAll(allstudentsUpdated);
 		
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}

@@ -77,7 +77,7 @@ public class StudentFee implements Serializable{
 	private List<StudentPaymentHistory> studentPaymentHistories;
 
 	@Transient
-    @JsonIgnoreProperties("studentFeeWaiver")
+    @JsonIgnoreProperties("studentFee")
 	private List<StudentFeeWaiverHistory> studentFeeWaiverHistories;
 	
 	public Long getStudentFeeId() {

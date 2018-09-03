@@ -64,18 +64,20 @@ public class StudentFeeController {
 		List<StudentPaymentHistory> studentPaymentHistories = new ArrayList<>();
 		List<StudentPaymentHistory> studentPaymentHistories1 = (List<StudentPaymentHistory>) studentFeePaymentRepository.findAll();
 		
-		
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistories = new ArrayList<>();
+		List<StudentFeeWaiverHistory> studentFeeWaiverHistories1 = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
 		
 		for(StudentPaymentHistory studentPayHistory : studentPaymentHistories1){
 			if(studentPayHistory.getStudent().getStudentId() == id){
 				studentPaymentHistories.add(studentPayHistory);
 			}
 		}
-	
-		/* Rahul M: this code to add wavier history, casuing issue 
-		List<StudentFeeWaiverHistory> studentFeeWaiverHistories = new ArrayList<>();
-		List<StudentFeeWaiverHistory> studentFeeWaiverHistory1 = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
-		*/
+
+		for(StudentFeeWaiverHistory studentFeeWaiverHistory : studentFeeWaiverHistories1){
+			if(studentFeeWaiverHistory.getStudentFee().getStudentFeeId() == id){
+				studentFeeWaiverHistories.add(studentFeeWaiverHistory);
+			}
+		}
 		
 		// implemented to show the latest studentFee when generated.
 		for (Student student : studentRepository.findAll()) {
@@ -90,16 +92,7 @@ public class StudentFeeController {
 					if (stdFee.isActive()) {
 						System.out.println("=====stdFee=========" + stdFee.toString());
 						stdFee.setStudentPaymentHistories(studentPaymentHistories);
-						
-						
-						/* Rahul M: this code to add wavier history, casuing issue 
-						for(StudentFeeWaiverHistory tmStudentFeeWaiverHistory : studentFeeWaiverHistory1){
-							if(tmStudentFeeWaiverHistory.getStudentFee().getStudentFeeId() == stdFee.getStudentFeeId()){
-								studentFeeWaiverHistories.add(tmStudentFeeWaiverHistory);
-							}
-						} 
 						stdFee.setStudentFeeWaiverHistories(studentFeeWaiverHistories);
-						*/
 						return new ResponseEntity<StudentFee>(stdFee, HttpStatus.OK);
 					}
 					// else{
@@ -234,18 +227,6 @@ public class StudentFeeController {
 			stuWaiverHist.setStudentFeeWaiverCmt(studentWaiver.getWaiverComments());
 			studentFeeWaiverHistoryRepository.save(stuWaiverHist);  
 			
-			/* Rahul this code to add waiver history, causing issue
-			List<StudentFeeWaiverHistory> studentFeeWaiverHistories = new ArrayList<>();
-			List<StudentFeeWaiverHistory> studentFeeWaiverHistory1 = (List<StudentFeeWaiverHistory>) studentFeeWaiverHistoryRepository.findAll();
-			
-			
-			for(StudentFeeWaiverHistory tmStudentFeeWaiverHistory : studentFeeWaiverHistory1){
-				if(tmStudentFeeWaiverHistory.getStudentFee().getStudentFeeId() == studentFee1.get().getStudentFeeId()){
-					studentFeeWaiverHistories.add(tmStudentFeeWaiverHistory);
-				}
-			} 
-			studentFee1.get().setStudentFeeWaiverHistories(studentFeeWaiverHistories);
-			*/
 			return new ResponseEntity<StudentFee>(studentFeeRepository.save (studentFee1.get()), HttpStatus.OK);
 		 }else{
 			 return new ResponseEntity<StudentFee>(HttpStatus.OK);
