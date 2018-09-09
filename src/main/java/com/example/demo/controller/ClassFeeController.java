@@ -232,4 +232,74 @@ public class ClassFeeController {
 		
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/generatestudentfeenew" , method=RequestMethod.POST)
+	public ResponseEntity<GenerateFee>  generateStudentFeeNew(@RequestBody GenerateFee generateFee) {
+
+		List<StudentFee> studentFees = new ArrayList<>();
+		
+		List<StudentFeeParams> studentFeeParamsClass = new ArrayList<>();
+		
+		// Copying ClassFee Params to StudentFee Params.
+		ClassFee classFee = generateFee.getClassFee();
+		for(ClassFeeParams classFeeParam : classFee.getClassFeeParams()){
+			StudentFeeParams studentFeeParams1 = new StudentFeeParams();
+			studentFeeParams1.setName(classFeeParam.getClassFeeType().getName());
+			studentFeeParams1.setValue(classFeeParam.getFeeAmount());
+			studentFeeParams1.setParamType(classFeeParam.getClassFeeType().getFrequency());
+			studentFeeParams1.setClassFee(classFee);
+			
+			studentFeeParamsClass.add(studentFeeParams1);
+		}
+		
+		//adding the copied studentFeeParams to StudentFee
+		// calculating StudentFeeAmt based on the studentFeeParams total value.
+		List<StudentClass> studentClasses= generateFee.getStudentClass();
+		
+		for(StudentClass studentClass : studentClasses){
+			List<Student> students = studentClass.getStudents();
+			
+			for(Student student : students){
+				List<StudentFeeParams> studentFeeParams = new ArrayList<>();
+				StudentFee studentFee = new StudentFee();
+				studentFee.setClassFee(classFee);
+				studentFee.setStudent(student);
+				studentFee.setStartDate(new Date());
+				studentFee.setEndDate(null);
+				
+				if(student.isNew()){
+					studentFeeParams.addAll(studentFeeParamsClass);
+				}
+				
+				studentFee.setStudentFeeParams(studentFeeParams);
+				studentFee.setStudentClass(studentClass);
+				
+				Integer studentTotalAmt =0 ;
+				//setting StudentFeeAmount.
+				for(StudentFeeParams studentFeeParam : studentFeeParams){
+					if(!studentFeeParam.getValue().isEmpty()){
+						studentTotalAmt = studentTotalAmt + Integer.parseInt(studentFeeParam.getValue());
+					}
+				}
+				
+				studentFee.setStudentFeeAmt(studentTotalAmt);
+				studentFee.setStudentBalanceFeeAmt(studentTotalAmt);
+				
+				studentFees.add(studentFee);
+				
+			}
+			
+			studentFeeRepository.saveAll(studentFees);
+			List<Student> allstudentsUpdated = new ArrayList<>();
+			
+			List<Student> allStudents = studentRepository.findByStudentClass(studentClass);
+			for(Student student : allStudents){
+				student.setNew(false);
+				allstudentsUpdated.add(student);
+			}
+			studentRepository.saveAll(allstudentsUpdated);
+		}
+		
+		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
+	}
 }

@@ -154,7 +154,7 @@ public class Student implements Serializable{
 	}
 
 	public Date getStudentdob() {
-		return studentdob;
+		return studentdob ;
 	}
 
 	public void setStudentdob(Date studentdob) {
@@ -374,5 +374,5 @@ public class Student implements Serializable{
 //				+ ", motherage=" + motherage + ", motherqualification=" + motherqualification + ", motherdob="
 //				+ motherdob + ", motherprofession=" + motherprofession + ", address=" + address + ", phoneno=" + phoneno + "]";
 //	}
-		
+	
 }
