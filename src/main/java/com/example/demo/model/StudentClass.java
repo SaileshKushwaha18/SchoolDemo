@@ -101,11 +101,11 @@ public class StudentClass implements Serializable{
 		this.students = students;
 	}
 
-	@Override
-	public String toString() {
-		return "StudentClass [studentClassId=" + studentClassId + ", name=" + name + ", description=" + description
-				+ ", isActive=" + isActive + ", students=" + students + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "StudentClass [studentClassId=" + studentClassId + ", name=" + name + ", description=" + description
+//				+ ", isActive=" + isActive + ", students=" + students + "]";
+//	}
 
 
 
