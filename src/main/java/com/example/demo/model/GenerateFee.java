@@ -15,6 +15,9 @@ public class GenerateFee  implements Serializable{
 	@JsonFormat
 	private List<StudentClass> studentClasses;
 	
+	@JsonFormat
+	private List<StudentPromotedClass> studentPromotedClasses;
+	
 	public ClassFee getClassFee() {
 		return classFee;
 	}
@@ -27,11 +30,19 @@ public class GenerateFee  implements Serializable{
 	public void setStudentClass(List<StudentClass> studentClasses) {
 		this.studentClasses = studentClasses;
 	}
-	@Override
-	public String toString() {
-		return "GenerateFee [classFee=" + classFee + ", studentClasses=" + studentClasses + "]";
-	}
 	
+	
+//	@Override
+//	public String toString() {
+//		return "GenerateFee [classFee=" + classFee + ", studentClasses=" + studentClasses + "]";
+//	}
+	
+	public List<StudentPromotedClass> getStudentPromotedClasses() {
+		return studentPromotedClasses;
+	}
+	public void setStudentPromotedClasses(List<StudentPromotedClass> studentPromotedClasses) {
+		this.studentPromotedClasses = studentPromotedClasses;
+	}
 	public GenerateFee() {
 		super();
 	}
@@ -39,6 +50,13 @@ public class GenerateFee  implements Serializable{
 		super();
 		this.classFee = classFee;
 		this.studentClasses = studentClasses;
+	}
+	public GenerateFee(ClassFee classFee, List<StudentClass> studentClasses,
+			List<StudentPromotedClass> studentPromotedClasses) {
+		super();
+		this.classFee = classFee;
+		this.studentClasses = studentClasses;
+		this.studentPromotedClasses = studentPromotedClasses;
 	}
 		
 

@@ -21,8 +21,10 @@ import com.example.demo.model.Student;
 import com.example.demo.model.StudentClass;
 import com.example.demo.model.StudentFee;
 import com.example.demo.model.StudentFeeParams;
+import com.example.demo.model.StudentPromotedClass;
 import com.example.demo.repository.ClassFeeParamsRepository;
 import com.example.demo.repository.ClassFeeRepository;
+import com.example.demo.repository.StudentClassRepository;
 import com.example.demo.repository.StudentFeeRepository;
 import com.example.demo.repository.StudentRepository;
 
@@ -31,6 +33,9 @@ import com.example.demo.repository.StudentRepository;
 public class ClassFeeController {
 	@Autowired
 	private ClassFeeRepository classFeeRepository;
+	
+	@Autowired
+	private StudentClassRepository studentClassRepository;
 	
 	@Autowired
 	private StudentFeeRepository studentFeeRepository;
@@ -300,6 +305,56 @@ public class ClassFeeController {
 			studentRepository.saveAll(allstudentsUpdated);
 		}
 		
+		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/studentpromoteclass" , method=RequestMethod.POST)
+	public ResponseEntity<GenerateFee> studentPromoteClass(@RequestBody GenerateFee generateFee) {
+		System.out.println("Indside Student Promote Class");
+		List<StudentPromotedClass> studentPromotedClasses = generateFee.getStudentPromotedClasses();
+		
+		for(StudentPromotedClass studentpromotedclass : studentPromotedClasses){
+			String studentId = studentpromotedclass.getStudentId();
+//			String student = studentpromotedclass.getStudent();
+			String currentclass = studentpromotedclass.getCurrentClass();
+			String promotedtoclass = studentpromotedclass.getPromotedToClass();
+			String passed = studentpromotedclass.getPassed();
+			
+//			System.out.println("Excel Student Id" + studentId);
+			Student studentDb= studentRepository.findByStudentId(Long.valueOf(studentId));
+			
+			//getting promoted class iD and then setting it to Student Object
+			StudentClass studentClassDb = studentClassRepository.findByName(promotedtoclass);
+			
+			if(studentClassDb != null && studentClassDb.getStudentClassId() !=null && currentclass.equalsIgnoreCase(studentDb.getStudentClass().getName()) && passed.equalsIgnoreCase("Y")){
+				studentDb.setStudentClass(studentClassDb);
+			}
+			
+			studentRepository.save(studentDb);
+		}
+		//System.out.println(studentPromotedClasses.toString());
+		
+		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
+	}
+	@RequestMapping(value="/studentpromoteclass" , method=RequestMethod.GET)
+	public ResponseEntity<GenerateFee> getStudentPromoteClass() {
+		GenerateFee generateFee = new GenerateFee();
+		System.out.println("Indside Student Promote Class Download");
+		List<StudentPromotedClass> studentPromotedClasses = new ArrayList<>();
+		
+		List<Student> students = (List<Student>) studentRepository.findAll();
+		for(Student student : students){		
+			StudentPromotedClass studentPromotedClass = new StudentPromotedClass();
+			studentPromotedClass.setStudentId(student.getStudentId().toString());
+			studentPromotedClass.setStudent(student.getFirstName() + " " + student.getLastName());
+			studentPromotedClass.setCurrentClass(student.getStudentClass().getName());
+			studentPromotedClass.setPromotedToClass("");
+			studentPromotedClass.setPassed("");
+			
+			studentPromotedClasses.add(studentPromotedClass);
+		}
+		
+		generateFee.setStudentPromotedClasses(studentPromotedClasses);
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
 }
