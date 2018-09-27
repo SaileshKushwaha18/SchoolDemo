@@ -24,10 +24,10 @@ public class GenerateFee  implements Serializable{
 	public void setClassFee(ClassFee classFee) {
 		this.classFee = classFee;
 	}
-	public List<StudentClass> getStudentClass() {
+	public List<StudentClass> getStudentClasses() {
 		return studentClasses;
 	}
-	public void setStudentClass(List<StudentClass> studentClasses) {
+	public void setStudentClasses(List<StudentClass> studentClasses) {
 		this.studentClasses = studentClasses;
 	}
 	

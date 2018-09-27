@@ -125,7 +125,7 @@ public class ClassFeeController {
 		
 		//adding the copied studentFeeParams to StudentFee
 		// calculating StudentFeeAmt based on the studentFeeParams total value.
-		List<StudentClass> studentClasses= generateFee.getStudentClass();
+		List<StudentClass> studentClasses= generateFee.getStudentClasses();
 		
 		for(StudentClass studentClass : studentClasses){
 			List<Student> students = studentClass.getStudents();
@@ -259,7 +259,7 @@ public class ClassFeeController {
 		
 		//adding the copied studentFeeParams to StudentFee
 		// calculating StudentFeeAmt based on the studentFeeParams total value.
-		List<StudentClass> studentClasses= generateFee.getStudentClass();
+		List<StudentClass> studentClasses= generateFee.getStudentClasses();
 		
 		for(StudentClass studentClass : studentClasses){
 			List<Student> students = studentClass.getStudents();
