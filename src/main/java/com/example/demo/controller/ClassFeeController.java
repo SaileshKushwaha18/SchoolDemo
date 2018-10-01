@@ -328,6 +328,7 @@ public class ClassFeeController {
 			
 			if(studentClassDb != null && studentClassDb.getStudentClassId() !=null && currentclass.equalsIgnoreCase(studentDb.getStudentClass().getName()) && passed.equalsIgnoreCase("Y")){
 				studentDb.setStudentClass(studentClassDb);
+				studentDb.setNew(true);
 			}
 			
 			studentRepository.save(studentDb);
@@ -336,6 +337,22 @@ public class ClassFeeController {
 		
 		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/closefee" , method=RequestMethod.POST)
+	public ResponseEntity<GenerateFee> closeFee(@RequestBody GenerateFee generateFee) {
+		System.out.println("Indside closeFee method");
+		List<StudentClass> studentClasses = generateFee.getStudentClasses();
+		
+		for(StudentClass studentclass : studentClasses){
+			List<Student> students = studentclass.getStudents();
+			
+			students.forEach(stu -> stu.setNew(true));
+			
+			studentRepository.saveAll(students);
+		}
+		return new ResponseEntity<GenerateFee>(generateFee, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/studentpromoteclass" , method=RequestMethod.GET)
 	public ResponseEntity<GenerateFee> getStudentPromoteClass() {
 		GenerateFee generateFee = new GenerateFee();
